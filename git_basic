@@ -1,0 +1,5 @@
+git push origin main ===> push branch main to origin
+git add . ===> add all file
+git add file ===> add file
+
+git status ===> see file status
