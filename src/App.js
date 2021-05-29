@@ -84,8 +84,8 @@ function App() {
         <h2>Result</h2>
         <h3>price: {price}</h3>
         <h3>volume: {stl_cal.volume} cm^3</h3>
-        <h3>boundingBox: {stl_cal.boundingBox[0]} {stl_cal.boundingBox[1]} {stl_cal.boundingBox[2]} mm</h3>
-        {/* <h3>weight not include infill: {stl_cal.weight} gm</h3> 
+        {/* <h3>boundingBox: {stl_cal.boundingBox[0]} {stl_cal.boundingBox[1]} {stl_cal.boundingBox[2]} mm</h3>
+        <h3>weight not include infill: {stl_cal.weight} gm</h3> 
         <h3>area: {stl_cal.area} m^2</h3>
         <h3>center of mass: {stl_cal.centerOfMass[0]} {stl_cal.centerOfMass[1]} {stl_cal.centerOfMass[2]} mm</h3> */}
       </div> : <p>{message}</p>}

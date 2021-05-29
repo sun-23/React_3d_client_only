@@ -48,12 +48,17 @@ class STLViewer extends Component {
         const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
         directionalLight.position.x = 0.3;
         directionalLight.position.y = 1;
-        directionalLight.position.z = 0.7;
+        directionalLight.position.z = 0.6;
         directionalLight.position.normalize();
         scene.add(directionalLight);
 
         const ambientLight = new THREE.AmbientLight(0x404040); // soft white light
         scene.add(ambientLight);
+
+        //                                     size, divisions, color, color
+        const gridHelper = new THREE.GridHelper(100,20,4473924,11184810);
+        gridHelper.rotateX(Math.PI / 2);
+        scene.add( gridHelper );
 
         const onLoad = geometry => {
             geometry.computeFaceNormals();
@@ -72,11 +77,14 @@ class STLViewer extends Component {
             xDims = geometry.boundingBox.max.x - geometry.boundingBox.min.x;
             yDims = geometry.boundingBox.max.y - geometry.boundingBox.min.y;
             zDims = geometry.boundingBox.max.z - geometry.boundingBox.min.z;
-
+            mesh.position.set(0, 0, zDims/2);
             scene.add(mesh);
 
             camera = new THREE.PerspectiveCamera(30, width / height, 1, distance);
-            camera.position.set(0, 0, Math.max(xDims * 3, yDims * 3, zDims * 3));
+            //camera.position.set(0, 0, Math.max(xDims * 3, yDims * 3, zDims * 3));
+            camera.position.set(100 * yDims/20,100 * yDims/20,100 * zDims/20); // yDims/20 ==> size z(height of object) in cm devided by 20 cm
+            camera.lookAt(new THREE.Vector3(0,0,0))
+            camera.up.set(0,0,1)
 
             scene.add(camera);
 
