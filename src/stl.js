@@ -111,19 +111,10 @@ class STLMeasures {
  */
 class NodeStl {
   /**
-   * @param {string|buffer} path
+   * @param {string|buffer} buffer
    * @param {object} config
    */
-  constructor(path, config = { density: 1.04 }) {
-    let buffer;
-
-    if (Object.prototype.toString.call(path) === "[object String]") {
-      //const fs = require("fs"); // moved this as a step toward browser compatibility
-      //buffer = fs.readFileSync(path);
-    } else {
-      buffer = path;
-    }
-
+  constructor(buffer, config = { density: 1.04 }) {
     this._parse(buffer, config);
   }
 
@@ -191,7 +182,6 @@ class NodeStl {
   static _parseSTLString(stl, density) {
     // yes, this is the regular expression, matching the vertexes
     // it was kind of tricky but it is fast and does the job
-    console.log("str stl ", stl);
     let vertexes = stl.match(
       /facet\s+normal\s+([-+]?\b(?:[0-9]*\.)?[0-9]+(?:[eE][-+]?[0-9]+)?\b)\s+([-+]?\b(?:[0-9]*\.)?[0-9]+(?:[eE][-+]?[0-9]+)?\b)\s+([-+]?\b(?:[0-9]*\.)?[0-9]+(?:[eE][-+]?[0-9]+)?\b)\s+outer\s+loop\s+vertex\s+([-+]?\b(?:[0-9]*\.)?[0-9]+(?:[eE][-+]?[0-9]+)?\b)\s+([-+]?\b(?:[0-9]*\.)?[0-9]+(?:[eE][-+]?[0-9]+)?\b)\s+([-+]?\b(?:[0-9]*\.)?[0-9]+(?:[eE][-+]?[0-9]+)?\b)\s+vertex\s+([-+]?\b(?:[0-9]*\.)?[0-9]+(?:[eE][-+]?[0-9]+)?\b)\s+([-+]?\b(?:[0-9]*\.)?[0-9]+(?:[eE][-+]?[0-9]+)?\b)\s+([-+]?\b(?:[0-9]*\.)?[0-9]+(?:[eE][-+]?[0-9]+)?\b)\s+vertex\s+([-+]?\b(?:[0-9]*\.)?[0-9]+(?:[eE][-+]?[0-9]+)?\b)\s+([-+]?\b(?:[0-9]*\.)?[0-9]+(?:[eE][-+]?[0-9]+)?\b)\s+([-+]?\b(?:[0-9]*\.)?[0-9]+(?:[eE][-+]?[0-9]+)?\b)\s+endloop\s+endfacet/g
     );
@@ -227,7 +217,6 @@ class NodeStl {
    */
   static _parseSTLBinary(buffer, density) {
     var faces = buffer.readUInt32LE(80);
-    console.log("faces ", faces);
     const dataOffset = 84;
     const faceLength = 12 * 4 + 2;
 
