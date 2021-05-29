@@ -31,6 +31,16 @@ export default function App() {
     setSTL_Cal(null);
   }
 
+  const selectFile = (e) => {
+    var file = e.target.files[0];
+    console.log(file.name.toLocaleLowerCase());
+    if(file.name.toLocaleLowerCase().endsWith('.stl')){
+      setFile(file);
+    } else {
+      alert(' Invalid file type. Only STL files are supported. Please select a new file. ');
+    }
+  }
+
   return (
     <div className="App">
       <h1>Hello CodeSandbox</h1>
@@ -38,15 +48,7 @@ export default function App() {
       <input
         type="file"
         name="name"
-        onChange={async (e) => {
-          var file = e.target.files[0];
-          console.log(file.name.toLocaleLowerCase());
-          if(file.name.toLocaleLowerCase().endsWith('.stl')){
-            setFile(file);
-          } else {
-            alert(' Invalid file type. Only STL files are supported. Please select a new file. ');
-          }
-        }}
+        onChange={(e) => selectFile(e)}
       ></input>
       <input type="submit" onClick={submitStl}></input>
         <label for="cars">  Material: </label>
