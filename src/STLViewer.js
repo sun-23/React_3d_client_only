@@ -45,10 +45,10 @@ class STLViewer extends Component {
 
         scene = new THREE.Scene();
         distance = 10000;
-        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
-        directionalLight.position.x = 0;
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+        directionalLight.position.x = 0.3;
         directionalLight.position.y = 1;
-        directionalLight.position.z = 0;
+        directionalLight.position.z = 0.7;
         directionalLight.position.normalize();
         scene.add(directionalLight);
 

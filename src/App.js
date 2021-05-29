@@ -89,14 +89,15 @@ function App() {
         <h3>area: {stl_cal.area} m^2</h3>
         <h3>center of mass: {stl_cal.centerOfMass[0]} {stl_cal.centerOfMass[1]} {stl_cal.centerOfMass[2]} mm</h3> */}
       </div> : <p>{message}</p>}
-      {stl_file ? <STLViewer
+      {stl_cal ? <STLViewer
         onSceneRendered={(element) => {
             console.log(element)
         }}
         sceneClassName="test-scene"
         file={stl_file}
         className="obj"
-        modelColor="#FF0000"/>
+        modelColor="#185adb"
+        backgroundColor="#fafafa"/>
       : null }
     </div>
   );
