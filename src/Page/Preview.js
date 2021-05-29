@@ -37,12 +37,9 @@ function Preview() {
     console.log(stl_file);
 
     stl_file.arrayBuffer().then(async (arrayBuffer) => {
-      console.log("arrayBuffer ", arrayBuffer);
-      const len = await arrayBuffer.byteLength;
-      console.log("len ", len);
       var buffer = Buffer.from(arrayBuffer);
-      console.log("readUInt32le(80) ", buffer.readInt32LE(80));
       var stl = new NodeStl(buffer, {density: material});
+      console.log(stl);
       setSTL_Cal(stl)
       console.log(stl);
       calculatingPrice(stl);
@@ -85,10 +82,6 @@ function Preview() {
         <h3>price: {price}</h3>
         <h3>volume: {stl_cal.volume} cm^3</h3>
         <h3>{stl_cal.weight * infill / 100}</h3>
-        {/* <h3>boundingBox: {stl_cal.boundingBox[0]} {stl_cal.boundingBox[1]} {stl_cal.boundingBox[2]} mm</h3>
-        <h3>weight not include infill: {stl_cal.weight} gm</h3> 
-        <h3>area: {stl_cal.area} m^2</h3>
-        <h3>center of mass: {stl_cal.centerOfMass[0]} {stl_cal.centerOfMass[1]} {stl_cal.centerOfMass[2]} mm</h3> */}
         <STLViewer
           onSceneRendered={(element) => {
               console.log(element)
@@ -99,7 +92,6 @@ function Preview() {
           modelColor="#185adb"
           backgroundColor="#fafafa"/>
       </div> : <p>{message}</p>}
-
     </div>
   );
 }
