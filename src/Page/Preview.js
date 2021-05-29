@@ -69,7 +69,7 @@ function Preview() {
       <Select_infill onChangeInfill={changeInfill} />
       <p>Material density: {material} g/cm^3</p>
 
-      {stl_cal ? <div>
+      {stl_cal ? <div className="Model_Preview">
         <h2>Result</h2>
         <h3>price: {price}</h3>
         <h3>volume: {stl_cal.volume} cm^3</h3>
