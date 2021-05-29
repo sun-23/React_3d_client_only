@@ -40,8 +40,12 @@ export default function App() {
         name="name"
         onChange={async (e) => {
           var file = e.target.files[0];
-          console.log(file);
-          setFile(file);
+          console.log(file.name.toLocaleLowerCase());
+          if(file.name.toLocaleLowerCase().endsWith('.stl')){
+            setFile(file);
+          } else {
+            alert(' Invalid file type. Only STL files are supported. Please select a new file. ');
+          }
         }}
       ></input>
       <input type="submit" onClick={submitStl}></input>
