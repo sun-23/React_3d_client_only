@@ -1,4 +1,6 @@
 import { useState } from "react";
+import {CuraWASM} from 'cura-wasm';
+import {resolveDefinition} from 'cura-wasm-definitions';
 import STLViewer from '../Component/STLViewer';
 import Select_material from '../Component/Select_material'
 import Select_infill from '../Component/Select_infill'
@@ -9,22 +11,31 @@ function Preview() {
   const [stl_file, setFile] = useState();
   const [stl_cal, setSTL_Cal] = useState();
   const [material, setMaterial] = useState(1.27);
-  const [infill, setInfill] = useState(20);
+  const [infill, setInfill] = useState(40);
   const [price, setPrice] = useState(0);
   const [message, setMessage] = useState('please click submit button');
+
+  const slicer = new CuraWASM({
+    /*
+     * The 3D printer definition to slice for https://github.com/Ultimaker/Cura/tree/master/resources/definitions
+     */
+    definition: resolveDefinition('prusa_i3_mk3'),
+  });
 
   const selectFile = (e) => {
     var file = e.target.files[0];
     if(file.name.toLocaleLowerCase().endsWith('.stl')){
-      setFile(file);
+     setFile(file);
     } else {
-      alert(' Invalid file type. Only STL files are supported. Please select a new file. ');
+     alert(' Invalid file type. Only STL files are supported. Please select a new file. ');
     }
   }
 
-  const submitStl = () => {
+  const submitStl = async () => {
     setSTL_Cal(null);
     setMessage('calculating...')
+    console.log(stl_file);
+
     stl_file.arrayBuffer().then(async (arrayBuffer) => {
       console.log("arrayBuffer ", arrayBuffer);
       const len = await arrayBuffer.byteLength;
@@ -73,6 +84,7 @@ function Preview() {
         <h2>Result</h2>
         <h3>price: {price}</h3>
         <h3>volume: {stl_cal.volume} cm^3</h3>
+        <h3>{stl_cal.weight * infill / 100}</h3>
         {/* <h3>boundingBox: {stl_cal.boundingBox[0]} {stl_cal.boundingBox[1]} {stl_cal.boundingBox[2]} mm</h3>
         <h3>weight not include infill: {stl_cal.weight} gm</h3> 
         <h3>area: {stl_cal.area} m^2</h3>
