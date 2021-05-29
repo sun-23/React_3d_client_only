@@ -46,17 +46,17 @@ class STLViewer extends Component {
         scene = new THREE.Scene();
         distance = 10000;
         const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
-        directionalLight.position.x = 0.3;
-        directionalLight.position.y = 1;
-        directionalLight.position.z = 0.6;
+        directionalLight.position.x = 0.7;
+        directionalLight.position.y = 0.4;
+        directionalLight.position.z = 1;
         directionalLight.position.normalize();
         scene.add(directionalLight);
 
         const ambientLight = new THREE.AmbientLight(0x404040); // soft white light
         scene.add(ambientLight);
 
-        //                                     size, divisions, color, color
-        const gridHelper = new THREE.GridHelper(100,20,4473924,11184810);
+        //                                     size (mm), divisions, color, color
+        const gridHelper = new THREE.GridHelper(200,20,4473924,11184810);
         gridHelper.rotateX(Math.PI / 2);
         scene.add( gridHelper );
 
