@@ -85,7 +85,7 @@ function Preview() {
         <h3>D: {stl_cal.boundingBox[0] / 10 } cm</h3>
         <h3>H: {stl_cal.boundingBox[2] / 10 } cm</h3>
       </div> : <p>{message}</p>}
-      {show ? <STLViewer
+      {/* {show ? <STLViewer
           onSceneRendered={(element) => {
               console.log(element)
           }}
@@ -94,7 +94,7 @@ function Preview() {
           className="obj"
           modelColor="#185adb"
           backgroundColor="#fafafa"/>
-      : null }
+      : null } */}
     </div>
   );
 }
