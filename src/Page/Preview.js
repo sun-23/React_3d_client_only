@@ -69,7 +69,11 @@ function Preview() {
   }
 
   const changeModelSize = (e) => {
+    console.log('click', e.target.value);
     setSize(e.target.value)
+    setSTL_Cal(null);
+    setShow(false)
+    setMessage('please click submit button');
   }
 
   return (
