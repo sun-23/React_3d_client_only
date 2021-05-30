@@ -1,7 +1,10 @@
+import '../CSS/preview.css'
 import { useState } from "react";
+import {ScaleLoader} from 'react-spinners';
 import STLViewer from '../Component/STLViewer';
 import Select_material from '../Component/Select_material'
 import Select_infill from '../Component/Select_infill'
+import Slider_modelsize from '../Component/Slider_modelsize'
 import NodeStl from "../stl" ;
 var Buffer = require("buffer/").Buffer;
 
@@ -11,6 +14,7 @@ function Preview() {
   const [show, setShow] = useState(false);
   const [material, setMaterial] = useState(1.27);
   const [infill, setInfill] = useState(40);
+  const [size, setSize] = useState(100);
   const [price, setPrice] = useState(0);
   const [message, setMessage] = useState('please click submit button');
 
@@ -64,28 +68,51 @@ function Preview() {
     setMessage('please click submit button');
   }
 
-  return (
-    <div className="App">
-      <h2>Preview 3d stl model</h2>
-      <input
-        type="file"
-        name="name"
-        onChange={(e) => selectFile(e)}
-      ></input>
-      <input type="submit" onClick={submitStl}></input>
-      <Select_material onChangeMaterial={changeMaterial} />
-      <Select_infill onChangeInfill={changeInfill} />
-      <p>Material density: {material} g/cm^3</p>
+  const changeModelSize = (e) => {
+    setSize(e.target.value)
+  }
 
-      {stl_cal ? <div className="Model_Preview">
-        <h2>Result</h2>
-        <h3>price: {price}</h3>
-        <h3>volume: {stl_cal.volume} cm^3</h3>
-        <h3>W: {stl_cal.boundingBox[1] / 10 } cm</h3>
-        <h3>D: {stl_cal.boundingBox[0] / 10 } cm</h3>
-        <h3>H: {stl_cal.boundingBox[2] / 10 } cm</h3>
-      </div> : <p>{message}</p>}
-      {show ? <STLViewer
+  return (
+    <div className="preview">
+      <div className="preview_detail">
+        <h2>Preview 3d stl model</h2>
+        <input
+          className="btn-file"
+          type="file"
+          name="name"
+          onChange={(e) => selectFile(e)}
+        ></input>
+        <input className="btn-submit" type="submit" onClick={submitStl}></input>
+        <div className="mat_infill">
+          <Select_material onChangeMaterial={changeMaterial} />
+          <Select_infill onChangeInfill={changeInfill} />
+        </div>
+        <Slider_modelsize size={size} onChangeSize={changeModelSize} />
+        <p>Material density: {material} g/cm^3</p>
+
+        {show ? <div>
+          {stl_cal ? <div>
+              <h3>Result</h3>
+              <p>price: {price}</p>
+              <p>volume: {stl_cal.volume} cm^3</p>
+              <p>W: {stl_cal.boundingBox[1] / 10 } cm</p>
+              <p>D: {stl_cal.boundingBox[0] / 10 } cm</p>
+              <p>H: {stl_cal.boundingBox[2] / 10 } cm</p>
+            </div> : <div style={{
+              height: '100%',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+              <ScaleLoader
+                color={'#123abc'}
+                loading={true}/>
+          </div>}
+          </div> : 
+        <p>{message}</p> }
+      </div>
+      <div className="preview_model">
+        {show ? <STLViewer
           onSceneRendered={(element) => {
               console.log(element)
           }}
@@ -93,8 +120,9 @@ function Preview() {
           file={stl_file}
           className="obj"
           modelColor="#185adb"
-          backgroundColor="#fafafa"/>
-      : null }
+          backgroundColor="#f0f0f0"/>
+        : null }
+      </div>
     </div>
   );
 }

@@ -1,6 +1,8 @@
+import '../CSS/infill.css'
+
 export default function Select_infill({ onChangeInfill }){
     return(
-        <div>
+        <div className="infill">
             <label for="infill">  Infill: </label>
             <select name="Infill" onChange={(e) => onChangeInfill(e)}>
                 <option value="40">20 %</option>

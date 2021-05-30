@@ -82,7 +82,7 @@ class STLViewer extends Component {
 
             camera = new THREE.PerspectiveCamera(30, width / height, 1, distance);
             //camera.position.set(0, 0, Math.max(xDims * 3, yDims * 3, zDims * 3));
-            camera.position.set(100 * xDims/20,100 * yDims/20,100 * zDims/20); // yDims/20 ==> size z(height of object) in cm devided by 20 cm
+            camera.position.set(100 * yDims/20,100 * yDims/20,100 * zDims/20); // yDims/20 ==> size z(height of object) in cm devided by 20 cm
             camera.lookAt(new THREE.Vector3(0,0,0))
             camera.up.set(0,0,1)
 
