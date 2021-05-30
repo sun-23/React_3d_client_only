@@ -1,6 +1,4 @@
 import { useState } from "react";
-import {CuraWASM} from 'cura-wasm';
-import {resolveDefinition} from 'cura-wasm-definitions';
 import STLViewer from '../Component/STLViewer';
 import Select_material from '../Component/Select_material'
 import Select_infill from '../Component/Select_infill'
@@ -10,40 +8,40 @@ var Buffer = require("buffer/").Buffer;
 function Preview() {
   const [stl_file, setFile] = useState();
   const [stl_cal, setSTL_Cal] = useState();
+  const [show, setShow] = useState(false);
   const [material, setMaterial] = useState(1.27);
   const [infill, setInfill] = useState(40);
   const [price, setPrice] = useState(0);
   const [message, setMessage] = useState('please click submit button');
 
-  const slicer = new CuraWASM({
-    /*
-     * The 3D printer definition to slice for https://github.com/Ultimaker/Cura/tree/master/resources/definitions
-     */
-    definition: resolveDefinition('prusa_i3_mk3'),
-  });
-
   const selectFile = (e) => {
     var file = e.target.files[0];
-    if(file.name.toLocaleLowerCase().endsWith('.stl')){
-     setFile(file);
+    if(file && file.name.toLocaleLowerCase().endsWith('.stl')){
+      setShow(false);
+      setSTL_Cal(null);
+      setFile(file);
     } else {
-     alert(' Invalid file type. Only STL files are supported. Please select a new file. ');
+      alert(' Invalid file type. Only STL files are supported. Please select a new file. ');
     }
   }
 
   const submitStl = async () => {
+    setShow(false);
     setSTL_Cal(null);
-    setMessage('calculating...')
-    console.log(stl_file);
-
-    stl_file.arrayBuffer().then(async (arrayBuffer) => {
-      var buffer = Buffer.from(arrayBuffer);
-      var stl = new NodeStl(buffer, {density: material});
-      console.log(stl);
-      setSTL_Cal(stl)
-      console.log(stl);
-      calculatingPrice(stl);
-    });
+    if(stl_file){
+      setMessage('calculating...');
+      console.log(stl_file);
+      setShow(true)
+      stl_file.arrayBuffer().then((arrayBuffer) => {
+        var buffer = Buffer.from(arrayBuffer);
+        var stl = new NodeStl(buffer, {density: material});
+        console.log(stl);
+        setSTL_Cal(stl)
+        calculatingPrice(stl);
+      });
+    } else {
+      alert('Please select file');
+    }
   }
 
   const calculatingPrice  = (stl_cal) => {
@@ -54,6 +52,7 @@ function Preview() {
     console.log('click', e.target.value);
     setMaterial(parseFloat(e.target.value));
     setSTL_Cal(null);
+    setShow(false)
     setMessage('please click submit button');
   }
 
@@ -61,6 +60,7 @@ function Preview() {
     console.log('click', e.target.value);
     setInfill(parseFloat(e.target.value));
     setSTL_Cal(null);
+    setShow(false)
     setMessage('please click submit button');
   }
 
@@ -81,8 +81,11 @@ function Preview() {
         <h2>Result</h2>
         <h3>price: {price}</h3>
         <h3>volume: {stl_cal.volume} cm^3</h3>
-        <h3>{stl_cal.weight * infill / 100}</h3>
-        <STLViewer
+        <h3>W: {stl_cal.boundingBox[1] / 10 } cm</h3>
+        <h3>D: {stl_cal.boundingBox[0] / 10 } cm</h3>
+        <h3>H: {stl_cal.boundingBox[2] / 10 } cm</h3>
+      </div> : <p>{message}</p>}
+      {show ? <STLViewer
           onSceneRendered={(element) => {
               console.log(element)
           }}
@@ -91,7 +94,7 @@ function Preview() {
           className="obj"
           modelColor="#185adb"
           backgroundColor="#fafafa"/>
-      </div> : <p>{message}</p>}
+      : null }
     </div>
   );
 }
