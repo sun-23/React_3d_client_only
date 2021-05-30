@@ -2,12 +2,12 @@ import {Component} from 'react';
 import PropTypes from 'prop-types'
 import ReactDOM from 'react-dom';
 import * as THREE from 'three';
-import STLLoaderModule from 'three-stl-loader'
+import STLLoaderModule from 'three-stl-loader' //git+https://github.com/bohdanbirdie/three-stl-loader.git not three-stl-loader
 import OrbitControlsModule from 'three-orbit-controls'
 import {ScaleLoader} from 'react-spinners';
 
 const STLLoader = STLLoaderModule(THREE);
-const OrbitControls = OrbitControlsModule(THREE);
+const OrbitControls = OrbitControlsModule(THREE); 
 
 class STLViewer extends Component {
     static propTypes = {
@@ -82,7 +82,7 @@ class STLViewer extends Component {
 
             camera = new THREE.PerspectiveCamera(30, width / height, 1, distance);
             //camera.position.set(0, 0, Math.max(xDims * 3, yDims * 3, zDims * 3));
-            camera.position.set(100 * yDims/20,100 * yDims/20,100 * zDims/20); // yDims/20 ==> size z(height of object) in cm devided by 20 cm
+            camera.position.set(100 * xDims/20,100 * yDims/20,100 * zDims/20); // yDims/20 ==> size z(height of object) in cm devided by 20 cm
             camera.lookAt(new THREE.Vector3(0,0,0))
             camera.up.set(0,0,1)
 
