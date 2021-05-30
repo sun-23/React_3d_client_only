@@ -49,7 +49,7 @@ function Preview() {
   }
 
   const calculatingPrice  = (stl_cal) => {
-    setPrice((50 + stl_cal.weight * (infill / 100) * (size / 100) * 10) < 100 ? 100 : (50 + stl_cal.weight * (infill / 100) * (size / 100) * 10));
+    setPrice((50 + stl_cal.weight * (infill / 100) * (size / 100) * (size / 100) * (size / 100) * 10) < 100 ? 100 : (50 + stl_cal.weight * (infill / 100) * (size / 100) * (size / 100) * (size / 100) * 10));
   }
 
   const changeMaterial = (e) => {
