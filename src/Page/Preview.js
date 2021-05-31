@@ -99,9 +99,9 @@ function Preview() {
               <h3>Result</h3>
               <p>price: {price}</p>
               <p>volume: {stl_cal.volume * (size / 100) * (size / 100) * (size / 100)} cm^3</p>
-              <p>W: {stl_cal.boundingBox[1] / 10 } cm</p>
-              <p>D: {stl_cal.boundingBox[0] / 10 } cm</p>
-              <p>H: {stl_cal.boundingBox[2] / 10 } cm</p>
+              <p>W: {stl_cal.boundingBox[1] / 10 * size / 100 } cm</p>
+              <p>D: {stl_cal.boundingBox[0] / 10 * size / 100} cm</p>
+              <p>H: {stl_cal.boundingBox[2] / 10 * size / 100} cm</p>
             </div> : <div style={{
               height: '100%',
               display: 'flex',
@@ -124,7 +124,8 @@ function Preview() {
           file={stl_file}
           className="obj"
           modelColor="#185adb"
-          backgroundColor="#f0f0f0"/>
+          backgroundColor="#f0f0f0"
+          scale={(size/100)}/>
         : null }
       </div>
     </div>

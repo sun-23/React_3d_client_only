@@ -20,6 +20,7 @@ class STLViewer extends Component {
         modelColor: PropTypes.string,
         sceneClassName: PropTypes.string,
         onSceneRendered: PropTypes.func,
+        scale: PropTypes.number,
     };
 
     static defaultProps = {
@@ -30,6 +31,7 @@ class STLViewer extends Component {
         rotate: true,
         orbitControls: true,
         sceneClassName: '',
+        scale: 1,
     };
 
     componentDidMount() {
@@ -77,12 +79,13 @@ class STLViewer extends Component {
             xDims = geometry.boundingBox.max.x - geometry.boundingBox.min.x;
             yDims = geometry.boundingBox.max.y - geometry.boundingBox.min.y;
             zDims = geometry.boundingBox.max.z - geometry.boundingBox.min.z;
-            mesh.position.set(0, 0, zDims/2);
+            mesh.position.set(0, 0, zDims/2 * this.props.scale);
+            mesh.scale.set(this.props.scale,this.props.scale,this.props.scale);
             scene.add(mesh);
 
             camera = new THREE.PerspectiveCamera(30, width / height, 1, distance);
             //camera.position.set(0, 0, Math.max(xDims * 3, yDims * 3, zDims * 3));
-            camera.position.set(100 * yDims/20,100 * yDims/20,100 * zDims/20); // yDims/20 ==> size z(height of object) in cm devided by 20 cm
+            camera.position.set(100 * yDims/20 * this.props.scale, 100 * yDims/20 * this.props.scale, 100 * zDims/20 * this.props.scale); // yDims/20 ==> size z(height of object) in cm devided by 20 cm
             camera.lookAt(new THREE.Vector3(0,0,0))
             camera.up.set(0,0,1)
 
