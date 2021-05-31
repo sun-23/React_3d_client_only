@@ -47,12 +47,34 @@ class STLViewer extends Component {
 
         scene = new THREE.Scene();
         distance = 10000;
-        const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
-        directionalLight.position.x = 0.7;
-        directionalLight.position.y = 0.4;
-        directionalLight.position.z = 1;
-        directionalLight.position.normalize();
-        scene.add(directionalLight);
+
+        const keyLight = new THREE.DirectionalLight(0xffffff, 1);
+        keyLight.position.x = 1;
+        keyLight.position.y = 1;
+        keyLight.position.z = 1;
+        keyLight.position.normalize();
+        scene.add(keyLight);
+
+        const fillLight = new THREE.DirectionalLight(0xffffff, 0.5);
+        fillLight.position.x = 1;
+        fillLight.position.y = -1;
+        fillLight.position.z = 1;
+        fillLight.position.normalize();
+        scene.add(fillLight);
+
+        const backLight = new THREE.DirectionalLight(0xffffff, 0.5);
+        backLight.position.x = -1;
+        backLight.position.y = -1;
+        backLight.position.z = 1;
+        backLight.position.normalize();
+        scene.add(backLight);
+
+        const bottomLight = new THREE.DirectionalLight(0xffffff, 0.7);
+        bottomLight.position.x = 0;
+        bottomLight.position.y = 0;
+        bottomLight.position.z = -1;
+        bottomLight.position.normalize();
+        scene.add(bottomLight);
 
         const ambientLight = new THREE.AmbientLight(0x404040); // soft white light
         scene.add(ambientLight);
