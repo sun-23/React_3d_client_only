@@ -4,12 +4,12 @@ import 'firebase/firestore'
 
 // Your web app's Firebase configuration
 var firebaseConfig = {
-    apiKey: "AIzaSyDBniwtXovFDjkGYwj-vufP4_QGX5zSsWo",
-    authDomain: "react-3d-price.firebaseapp.com",
-    projectId: "react-3d-price",
-    storageBucket: "react-3d-price.appspot.com",
-    messagingSenderId: "882676898485",
-    appId: "1:882676898485:web:fa1a335e17b61b8e77bcfc"
+    apiKey: process.env.REACT_APP_API_KEY,
+    authDomain: process.env.REACT_APP_AUTH_DOMAIN,
+    projectId: process.env.REACT_APP_PROJECT_ID,
+    storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
+    messagingSenderId: process.env.REACT_APP_SENDER_ID,
+    appId: process.env.REACT_APP_APP_ID
 };
 // Initialize Firebase
 const app = firebase.initializeApp(firebaseConfig);
