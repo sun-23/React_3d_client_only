@@ -18,14 +18,8 @@ import Login from './Page/Login'
 
 function App() {
   return (
-    // <div className="App">
-    //   <Preview/>
-    // </div>
-    <Container 
-      className="d-flex align-items-center justify-content-center"
-      style={{ minHeight: "100vh" }}
-    >
-      <div className="w-100" style={{ maxWidth: "400px" }}>
+    <Container className="container">
+      <div>
         <Router>
           <AuthProvider>
             <Switch>

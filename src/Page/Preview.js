@@ -1,10 +1,10 @@
-import '../CSS/preview.css'
 import { useState } from "react";
 import {ScaleLoader} from 'react-spinners';
 import STLViewer from '../Component/STLViewer';
 import Select_material from '../Component/Select_material'
 import Select_infill from '../Component/Select_infill'
 import Slider_modelsize from '../Component/Slider_modelsize'
+import Select_Quanlity from '../Component/Select_Quality'
 import NodeStl from "../stl" ;
 var Buffer = require("buffer/").Buffer;
 
@@ -15,6 +15,7 @@ function Preview() {
   const [material, setMaterial] = useState(1.27);
   const [infill, setInfill] = useState(40);
   const [size, setSize] = useState(100);
+  const [quality, setQuality] = useState(1);
   const [price, setPrice] = useState(0);
   const [message, setMessage] = useState('please click submit button');
 
@@ -49,7 +50,10 @@ function Preview() {
   }
 
   const calculatingPrice  = (stl_cal) => {
-    setPrice((50 + stl_cal.weight * (infill / 100) * (size / 100) * (size / 100) * (size / 100) * 10) < 100 ? 100 : (50 + stl_cal.weight * (infill / 100) * (size / 100) * (size / 100) * (size / 100) * 10));
+    const x = (50 + stl_cal.weight * (infill / 100) * (size / 100) * (size / 100) * (size / 100) * 10) < 100 ? 100 : (50 + stl_cal.weight * (infill / 100) * (size / 100) * (size / 100) * (size / 100) * 10);
+    const price = x * quality;
+    console.log(price);
+    setPrice(price);
   }
 
   const changeMaterial = (e) => {
@@ -76,46 +80,17 @@ function Preview() {
     setMessage('please click submit button');
   }
 
-  return (
-    <div className="preview">
-      <div className="preview_detail">
-        <h2>Preview 3d stl model</h2>
-        <input
-          className="btn-file"
-          type="file"
-          name="name"
-          onChange={(e) => selectFile(e)}
-        ></input>
-        <input className="btn-submit" type="submit" onClick={submitStl}></input>
-        <div className="mat_infill">
-          <Select_material onChangeMaterial={changeMaterial} />
-          <Select_infill onChangeInfill={changeInfill} />
-        </div>
-        <Slider_modelsize size={size} onChangeSize={changeModelSize} />
-        <p>Material density: {material} g/cm^3</p>
+  const changeQuanlity = (e) => {
+    console.log('click', e.target.value);
+    setQuality(e.target.value)
+    setSTL_Cal(null);
+    setShow(false)
+    setMessage('please click submit button');
+  }
 
-        {show ? <div>
-          {stl_cal ? <div>
-              <h3>Result</h3>
-              <p>price: {price}</p>
-              <p>volume: {stl_cal.volume * (size / 100) * (size / 100) * (size / 100)} cm^3</p>
-              <p>W: {stl_cal.boundingBox[1] / 10 * size / 100 } cm</p>
-              <p>D: {stl_cal.boundingBox[0] / 10 * size / 100} cm</p>
-              <p>H: {stl_cal.boundingBox[2] / 10 * size / 100} cm</p>
-            </div> : <div style={{
-              height: '100%',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
-              <ScaleLoader
-                color={'#123abc'}
-                loading={true}/>
-          </div>}
-          </div> : 
-        <p>{message}</p> }
-      </div>
-      <div className="preview_model">
+  return (
+    <div className="d-flex justify-content-center">
+      <div className="p-3">
         {show ? <STLViewer
           onSceneRendered={(element) => {
               console.log(element)
@@ -126,7 +101,51 @@ function Preview() {
           modelColor="#185adb"
           backgroundColor="#f0f0f0"
           scale={(size/100)}/>
-        : null }
+        : <div style={{width: "400px" , height: "400px", backgroundColor: "gray"}}>
+        </div> }
+      </div>
+      <div className="p-3 form-control">
+        <h2>Preview 3d stl model</h2>
+        <div className="row input-group mb-3">
+          <div className="col">
+            <input
+              className="form-control"
+              type="file"
+              name="name"
+              onChange={(e) => selectFile(e)}
+            ></input>
+          </div>
+          <div className="col">
+            <input className="btn btn-primary" type="submit" onClick={submitStl}></input>
+          </div>
+        </div>
+        <div>
+          <Select_material onChangeMaterial={changeMaterial} />
+          <Select_infill onChangeInfill={changeInfill} />
+          <Select_Quanlity onChangeQuality={changeQuanlity}/>
+          <Slider_modelsize size={size} onChangeSize={changeModelSize} />
+          <p>Material density: {material} g/cm^3</p>
+          {show ? <div>
+            {stl_cal ? <div>
+                <h3>Result</h3>
+                <p>price: {price}</p>
+                <p>volume: {stl_cal.volume * (size / 100) * (size / 100) * (size / 100)} cm^3</p>
+                <p>W: {stl_cal.boundingBox[1] / 10 * size / 100 } cm</p>
+                <p>D: {stl_cal.boundingBox[0] / 10 * size / 100} cm</p>
+                <p>H: {stl_cal.boundingBox[2] / 10 * size / 100} cm</p>
+              </div> : <div style={{
+                height: '100%',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+                <ScaleLoader
+                  color={'#123abc'}
+                  loading={true}/>
+            </div>}
+            </div> : 
+          <p className="alert alert-danger">{message}!</p>}
+        </div>
       </div>
     </div>
   );
