@@ -19,6 +19,20 @@ function App() {
   return (
     <Container className="container">
       <div>
+        <ul class="nav">
+          <li class="nav-item">
+            <Link class="nav-link" aria-current="page" href="/">Home</Link>
+          </li>
+          <li class="nav-item">
+            <Link class="nav-link" to="/instantqoutation">Qoute</Link>
+          </li>
+          <li class="nav-item">
+            <Link class="nav-link" href="/login">Log In</Link>
+          </li>
+          <li class="nav-item">
+            <Link class="nav-link" href="/signup">Sign Up</Link>
+          </li>
+        </ul>
         <Router>
           <AuthProvider>
             <Switch>
