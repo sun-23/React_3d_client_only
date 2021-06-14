@@ -1,5 +1,3 @@
-import React from 'react'
-
 export default function Select_Quality({ onChangeQuality }) {
     return(
         <div className="row">

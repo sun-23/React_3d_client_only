@@ -1,5 +1,3 @@
-
-
 export default function Select_infill({ onChangeInfill }){
     return(
         <div className="row">

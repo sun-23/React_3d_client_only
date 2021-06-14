@@ -1,5 +1,3 @@
-import '../CSS/slider.css'
-
 export default function Slider_modelsize({size, onChangeSize}) {
     return(
         <div className="row">

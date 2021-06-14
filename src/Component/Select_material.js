@@ -1,5 +1,3 @@
-
-
 export default function Select_material({ onChangeMaterial }){
     return(
         <div className="row">
