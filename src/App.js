@@ -19,21 +19,21 @@ function App() {
   return (
     <Container className="container">
       <div>
-        <ul class="nav">
-          <li class="nav-item">
-            <Link class="nav-link" aria-current="page" href="/">Home</Link>
-          </li>
-          <li class="nav-item">
-            <Link class="nav-link" to="/instantqoutation">Qoute</Link>
-          </li>
-          <li class="nav-item">
-            <Link class="nav-link" href="/login">Log In</Link>
-          </li>
-          <li class="nav-item">
-            <Link class="nav-link" href="/signup">Sign Up</Link>
-          </li>
-        </ul>
         <Router>
+          <ul class="nav">
+            <li class="nav-item">
+              <Link class="nav-link" aria-current="page" to="/">Home</Link>
+            </li>
+            <li class="nav-item">
+              <Link class="nav-link" to="/instantqoutation">Qoute</Link>
+            </li>
+            <li class="nav-item">
+              <Link class="nav-link" to="/login">Log In</Link>
+            </li>
+            <li class="nav-item">
+              <Link class="nav-link" to="/signup">Sign Up</Link>
+            </li>
+          </ul>
           <AuthProvider>
             <Switch>
               <Route exact path="/" component={Home}/>
