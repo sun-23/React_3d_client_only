@@ -1,4 +1,3 @@
-import "./CSS/styles.css";
 import "bootstrap/dist/css/bootstrap.min.css"
 import { Container } from 'react-bootstrap'
 import { AuthProvider } from './context/AuthContext'
