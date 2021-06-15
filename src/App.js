@@ -17,23 +17,26 @@ import Login from './Page/Login'
 
 function App() {
   return (
-    <Container className="container">
       <div>
         <Router>
-          <ul class="nav">
-            <li class="nav-item">
-              <Link class="nav-link" aria-current="page" to="/">Home</Link>
-            </li>
-            <li class="nav-item">
-              <Link class="nav-link" to="/instantqoutation">Qoute</Link>
-            </li>
-            <li class="nav-item">
-              <Link class="nav-link" to="/login">Log In</Link>
-            </li>
-            <li class="nav-item">
-              <Link class="nav-link" to="/signup">Sign Up</Link>
-            </li>
-          </ul>
+          <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div className="container-fluid">
+              <Link className="navbar-brand" aria-current="page" to="/">3DSun</Link>
+              <div className="collapse navbar-collapse">
+                <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+                  <li className="nav-item">
+                    <Link className="nav-link" to="/instantqoutation">Qoute</Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link className="nav-link" to="/login">Log In</Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link className="nav-link" to="/signup">Sign Up</Link>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </nav>
           <AuthProvider>
             <Switch>
               <Route exact path="/" component={Home}/>
@@ -44,7 +47,6 @@ function App() {
           </AuthProvider>
         </Router>
       </div>
-    </Container>
   );
 }
 

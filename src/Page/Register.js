@@ -26,7 +26,7 @@ export default function Register() {
     }
 
     return(
-        <>
+        <div className="p-4">
             <Card>
                 <Card.Body>
                     <h2 className="text-center mb-4">Sign Up</h2>
@@ -47,6 +47,6 @@ export default function Register() {
             <div className="w-100 text-center mt-2">
                 Aready have an account? <Link to="/login">Log In</Link>
             </div>
-        </>
+        </div>
     )
 }

@@ -89,8 +89,8 @@ function Preview() {
   }
 
   return (
-    <div className="d-flex justify-content-center">
-      <div className="p-3">
+    <div className="d-flex justify-content-center p-4">
+      <div>
         {show ? <STLViewer
           onSceneRendered={(element) => {
               console.log(element)
@@ -101,10 +101,10 @@ function Preview() {
           modelColor="#185adb"
           backgroundColor="#f0f0f0"
           scale={(size/100)}/>
-        : <div style={{width: "400px" , height: "400px", backgroundColor: "gray"}}>
+        : <div className="rounded" style={{width: "400px" , height: "400px", backgroundColor: "gray"}}>
         </div> }
       </div>
-      <div className="p-3 form-control">
+      <div className="form-control">
         <h2>Preview 3d stl model</h2>
         <div className="row input-group mb-3">
           <div className="col">
