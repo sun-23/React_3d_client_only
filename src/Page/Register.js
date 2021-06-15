@@ -26,7 +26,7 @@ export default function Register() {
     }
 
     return(
-        <div className="p-4">
+        <div className="m-5">
             <Card>
                 <Card.Body>
                     <h2 className="text-center mb-4">Sign Up</h2>

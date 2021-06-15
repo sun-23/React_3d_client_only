@@ -14,6 +14,8 @@ import Preview from './Page/Preview'
 import Register from './Page/Register'
 import Home from './Page/Home'
 import Login from './Page/Login'
+import Contact from './Page/Contact'
+import Footer from './Component/Footer'
 
 function App() {
   return (
@@ -26,6 +28,9 @@ function App() {
                 <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                   <li className="nav-item">
                     <Link className="nav-link" to="/instantqoutation">Qoute</Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link className="nav-link" to="/contact">Contact</Link>
                   </li>
                   <li className="nav-item">
                     <Link className="nav-link" to="/login">Log In</Link>
@@ -43,8 +48,10 @@ function App() {
               <Route path="/instantqoutation" component={Preview}/>
               <Route path="/signup" component={Register}/>
               <Route path="/login" component={Login}/>
+              <Route path="/contact" component={Contact}/>
             </Switch>
           </AuthProvider>
+          <Footer/>
         </Router>
       </div>
   );
