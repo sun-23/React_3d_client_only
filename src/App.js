@@ -9,11 +9,13 @@ import {
   Route,
   Link
 } from "react-router-dom";
+import PrivateRoute from './Route/PrivateRoute'
 
 import Preview from './Page/Preview'
 import Register from './Page/Register'
 import Home from './Page/Home'
 import Login from './Page/Login'
+import Dashboard from "./Page/Dashboard";
 import Contact from './Page/Contact'
 import Footer from './Component/Footer'
 
@@ -41,6 +43,9 @@ function App() {
                   <Nav.Link>
                     <Link className="nav-link" to="/signup">Sign Up</Link>
                   </Nav.Link>
+                  <Nav.Link>
+                    <Link className="nav-link" to="/dashboard">Dashboard</Link>
+                  </Nav.Link>
                 </Nav>
               </Navbar.Collapse>
             </Container>
@@ -52,6 +57,7 @@ function App() {
               <Route path="/signup" component={Register}/>
               <Route path="/login" component={Login}/>
               <Route path="/contact" component={Contact}/>
+              <PrivateRoute path="/dashboard" component={Dashboard}/>
             </Switch>
           </AuthProvider>
           <Footer/>
