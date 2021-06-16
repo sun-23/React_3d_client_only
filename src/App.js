@@ -1,5 +1,5 @@
 import "bootstrap/dist/css/bootstrap.min.css"
-import { Container } from 'react-bootstrap'
+import { Container, Navbar, Nav } from 'react-bootstrap'
 import { AuthProvider } from './context/AuthContext'
 import { useState } from "react";
 
@@ -21,27 +21,30 @@ function App() {
   return (
       <div>
         <Router>
-          <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-            <div className="container-fluid">
-              <Link className="navbar-brand" aria-current="page" to="/">3DSun</Link>
-              <div className="collapse navbar-collapse">
-                <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-                  <li className="nav-item">
+          <Navbar bg="dark" expand="lg" variant="dark">
+            <Container>
+              <Navbar.Brand>
+                <Link className="navbar-brand" to="/">3DSun</Link>
+              </Navbar.Brand>
+              <Navbar.Toggle aria-controls="basic-navbar-nav"/>
+              <Navbar.Collapse id="basic-navbar-nav">
+                <Nav className="mr-auto">
+                  <Nav.Link>
                     <Link className="nav-link" to="/instantqoutation">Qoute</Link>
-                  </li>
-                  <li className="nav-item">
+                  </Nav.Link>
+                  <Nav.Link>
                     <Link className="nav-link" to="/contact">Contact</Link>
-                  </li>
-                  <li className="nav-item">
+                  </Nav.Link>
+                  <Nav.Link>
                     <Link className="nav-link" to="/login">Log In</Link>
-                  </li>
-                  <li className="nav-item">
+                  </Nav.Link>
+                  <Nav.Link>
                     <Link className="nav-link" to="/signup">Sign Up</Link>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </nav>
+                  </Nav.Link>
+                </Nav>
+              </Navbar.Collapse>
+            </Container>
+          </Navbar>
           <AuthProvider>
             <Switch>
               <Route exact path="/" component={Home}/>

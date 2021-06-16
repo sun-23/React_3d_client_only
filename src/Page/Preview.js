@@ -89,7 +89,7 @@ function Preview() {
   }
 
   return (
-    <div className="d-flex justify-content-center p-4">
+    <div className="d-flex justify-content-center container m-5">
       <div>
         {show ? <STLViewer
           onSceneRendered={(element) => {
