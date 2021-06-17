@@ -26,20 +26,22 @@ export default function NavBar() {
                 <Link className="navbar-brand" to="/">3DSun</Link>
               </Navbar.Brand>
               <Navbar.Toggle aria-controls="basic-navbar-nav"/>
-              <Navbar.Collapse id="basic-navbar-nav">
-                <Nav className="mr-auto">
+              <Navbar.Collapse id="basic-navbar-nav w-100">
+                <Nav className="mr-auto w-100">
                   <Nav.Link>
                     <Link className="nav-link" to="/instantqoutation">Qoute</Link>
                   </Nav.Link>
                   <Nav.Link>
                     <Link className="nav-link" to="/contact">Contact</Link>
                   </Nav.Link>
+                </Nav>
+                <Nav className="ml-auto w-50 justify-content-end">
                   {currentUser ? (
                     <>
-                      <Nav.Link className="col">
+                      <Nav.Link>
                       <Link className="nav-link" to="/dashboard">{currentUser && currentUser.email}</Link>
                       </Nav.Link>
-                      <Nav.Link className="col">
+                      <Nav.Link>
                         <Button variant="link" onClick={handleLogout}>Log Out</Button>
                       </Nav.Link>
                     </>
