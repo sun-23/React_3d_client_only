@@ -1,13 +1,12 @@
 import "bootstrap/dist/css/bootstrap.min.css"
-import { Container, Navbar, Nav } from 'react-bootstrap'
 import { AuthProvider } from './context/AuthContext'
-import { useState } from "react";
 
 import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link
+  Link,
+  useHistory
 } from "react-router-dom";
 import PrivateRoute from './Route/PrivateRoute'
 
@@ -19,38 +18,15 @@ import Dashboard from "./Page/Dashboard";
 import Contact from './Page/Contact'
 import Footer from './Component/Footer'
 
+import NavBar from "./Component/NavBar";
+
 function App() {
+
   return (
       <div>
         <Router>
-          <Navbar bg="dark" expand="lg" variant="dark">
-            <Container>
-              <Navbar.Brand>
-                <Link className="navbar-brand" to="/">3DSun</Link>
-              </Navbar.Brand>
-              <Navbar.Toggle aria-controls="basic-navbar-nav"/>
-              <Navbar.Collapse id="basic-navbar-nav">
-                <Nav className="mr-auto">
-                  <Nav.Link>
-                    <Link className="nav-link" to="/instantqoutation">Qoute</Link>
-                  </Nav.Link>
-                  <Nav.Link>
-                    <Link className="nav-link" to="/contact">Contact</Link>
-                  </Nav.Link>
-                  <Nav.Link>
-                    <Link className="nav-link" to="/login">Log In</Link>
-                  </Nav.Link>
-                  <Nav.Link>
-                    <Link className="nav-link" to="/signup">Sign Up</Link>
-                  </Nav.Link>
-                  <Nav.Link>
-                    <Link className="nav-link" to="/dashboard">Dashboard</Link>
-                  </Nav.Link>
-                </Nav>
-              </Navbar.Collapse>
-            </Container>
-          </Navbar>
           <AuthProvider>
+            <NavBar/>
             <Switch>
               <Route exact path="/" component={Home}/>
               <Route path="/instantqoutation" component={Preview}/>
@@ -59,8 +35,8 @@ function App() {
               <Route path="/contact" component={Contact}/>
               <PrivateRoute path="/dashboard" component={Dashboard}/>
             </Switch>
+            <Footer/>
           </AuthProvider>
-          <Footer/>
         </Router>
       </div>
   );
