@@ -25,6 +25,8 @@ function Preview() {
       setShow(false);
       setSTL_Cal(null);
       setFile(file);
+      setPrice(0);
+      setMessage('please click submit button');
     } else {
       alert(' Invalid file type. Only STL files are supported. Please select a new file. ');
     }
@@ -34,7 +36,6 @@ function Preview() {
     setShow(false);
     setSTL_Cal(null);
     if(stl_file){
-      setMessage('calculating...');
       console.log(stl_file);
       setShow(true)
       stl_file.arrayBuffer().then((arrayBuffer) => {
@@ -128,11 +129,11 @@ function Preview() {
           {show ? <div>
             {stl_cal ? <div>
                 <h3>Result</h3>
-                <p>price: {price}</p>
-                <p>volume: {stl_cal.volume * (size / 100) * (size / 100) * (size / 100)} cm^3</p>
-                <p>W: {stl_cal.boundingBox[1] / 10 * size / 100 } cm</p>
-                <p>D: {stl_cal.boundingBox[0] / 10 * size / 100} cm</p>
-                <p>H: {stl_cal.boundingBox[2] / 10 * size / 100} cm</p>
+                <p>price: {price.toFixed(2)}</p>
+                <p>volume: {(stl_cal.volume * (size / 100) * (size / 100) * (size / 100)).toFixed(2)} cm^3</p>
+                <p>W: {(stl_cal.boundingBox[1] / 10 * size / 100).toFixed(2)} cm</p>
+                <p>D: {(stl_cal.boundingBox[0] / 10 * size / 100).toFixed(2)} cm</p>
+                <p>H: {(stl_cal.boundingBox[2] / 10 * size / 100).toFixed(2)} cm</p>
               </div> : <div style={{
                 height: '100%',
                 display: 'flex',
