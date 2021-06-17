@@ -42,7 +42,7 @@ export default function NavBar() {
                       <Link className="nav-link" to="/dashboard">{currentUser && currentUser.email}</Link>
                       </Nav.Link>
                       <Nav.Link>
-                        <Button variant="link" onClick={handleLogout}>Log Out</Button>
+                        <Button variant="link" onClick={handleLogout} style={{textDecoration: "none", color: "lightgray"}}>Log Out</Button>
                       </Nav.Link>
                     </>
                   ): (

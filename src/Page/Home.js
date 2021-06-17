@@ -26,8 +26,15 @@ export default function Home() {
                 alignContent:"center"
             }}>
                 <Link 
-                    style={{margin:"auto"}} 
-                    className="btn btn-secondary" 
+                    style={{
+                        margin:"auto",
+                        padding: "5px",
+                        paddingLeft: "10px",
+                        paddingRight: "10px",
+                        backgroundColor: "gray",
+                        color: "white",
+                        textDecoration: "none"
+                    }}  
                     to="/signup"
                 >ลงทะเบียนและสั่งงานตอนนี้</Link>
             </div>
