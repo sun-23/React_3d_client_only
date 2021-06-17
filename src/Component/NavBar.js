@@ -39,10 +39,11 @@ export default function NavBar() {
                   {currentUser ? (
                     <>
                       <Nav.Link>
-                      <Link className="nav-link" to="/dashboard">{currentUser && currentUser.email}</Link>
+                        <Link className="nav-link" to="/dashboard">{currentUser && currentUser.email}</Link>
                       </Nav.Link>
                       <Nav.Link>
-                        <Button variant="link" onClick={handleLogout} style={{textDecoration: "none", color: "lightgray"}}>Log Out</Button>
+                        {/* <Button variant="secondary" onClick={handleLogout} style={{textDecoration: "none",  color: "lightgray"}}>Log Out</Button> */}
+                        <Link className="nav-link" onClick={handleLogout}>Log Out</Link>
                       </Nav.Link>
                     </>
                   ): (
