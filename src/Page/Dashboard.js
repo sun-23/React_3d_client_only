@@ -1,10 +1,12 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Card, Button, Alert } from "react-bootstrap"
 import { useAuth } from "../context/AuthContext"
 import { Link, useHistory } from "react-router-dom"
+import { db } from '../firebase/firebase'
 
 export default function Dashboard() {
   const [error, setError] = useState("")
+  const [address, setAddress] = useState("");
   const { currentUser, logout } = useAuth()
   const history = useHistory()
 
@@ -19,13 +21,33 @@ export default function Dashboard() {
     }
   }
 
+  useEffect(() => {
+      console.log('read address', currentUser.uid);
+      const sub = db.collection("users").doc(currentUser.uid)
+          .onSnapshot((doc) => {
+              console.log("Current data: ", doc.data());
+              setAddress(doc.data().address);
+          });
+      return () => {
+          // cleanup
+          sub();
+      }
+  }, [])
+
   return (
     <div className="container m-5">
       <Card>
         <Card.Body>
           <h2 className="text-center mb-4">Profile</h2>
           {error && <Alert variant="danger">{error}</Alert>}
-          <strong>Email:</strong> {currentUser.email}
+          <div className="col">
+            <div className="col">
+              <strong>Email:</strong> {currentUser.email}
+            </div>
+            <div className="col">
+              <strong>Address:</strong> {address}
+            </div>
+          </div>
           <Link to="/update-profile" className="btn btn-primary w-100 mt-3">
              Update Address
           </Link>
