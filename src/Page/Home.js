@@ -4,7 +4,7 @@ import background from '../image/background.jpg'
 
 export default function Home() {
     return (
-        <div style={{fontFamily: "Mitr, sans-serif"}}>
+        <div>
             <div style={{
                 backgroundImage: `url(${process.env.PUBLIC_URL + '/image/background.jpg'})`,
                 backgroundSize:'cover',
@@ -15,8 +15,8 @@ export default function Home() {
                 alignContent:"center"
             }}>
                 <div style={{margin:"auto"}}>
-                    <h1 className="fw-bold">บริการผลิตชิ้นงาน</h1>
-                    <p>สร้างสรรค์ผลงานของคุณเอง ในราคาที่ดีที่สุด</p>
+                    <h1 className="fw-bold">3D Priting Services</h1>
+                    <p>Create your own product at the most affordable price</p>
                 </div>
             </div>
             <div style={{
@@ -36,7 +36,7 @@ export default function Home() {
                         textDecoration: "none"
                     }}  
                     to="/signup"
-                >ลงทะเบียนและสั่งงานตอนนี้</Link>
+                >Register and order now</Link>
             </div>
         </div>
     )

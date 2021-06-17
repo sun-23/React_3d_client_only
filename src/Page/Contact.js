@@ -30,14 +30,14 @@ export default function Contact() {
                     <input type="email" class="form-control" onChange={setTextEmail} value={email} placeholder="name@example.com"/>
                 </div>
                 <div class="mb-3">
-                    <label class="form-label">ชื่อ-นามสกุล</label>
+                    <label class="form-label">Name</label>
                     <input class="form-control" value={name} onChange={setTextName}/>
                 </div>
                 <div class="mb-3">
-                    <label class="form-label">ข้อความ</label>
+                    <label class="form-label">Message</label>
                     <textarea class="form-control" rows="3" value={text} onChange={setTextText}></textarea>
                 </div>
-                <Button className="w-100 mt-4" type="submit" onClick={sentContact}>ส่ง</Button>
+                <Button className="w-100 mt-4" type="submit" onClick={sentContact}>Submit</Button>
             </div>
         </div>
     )

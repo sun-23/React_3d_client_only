@@ -19,7 +19,7 @@ export default function Login() {
         await login(emailRef.current.value, passwordRef.current.value).then((value) =>{
             console.log(value);
             setLoading(false)
-            history.push('/')
+            history.push('/dashboard')
         }).catch((error) => {
             console.log('error', error);
             setError(error.message)

@@ -29,7 +29,7 @@ export default function NavBar() {
               <Navbar.Collapse id="basic-navbar-nav w-100">
                 <Nav className="mr-auto w-100">
                   <Nav.Link>
-                    <Link className="nav-link" to="/instantqoutation">Qoute</Link>
+                    <Link className="nav-link" to="/instantqoutation">Instant Qoute</Link>
                   </Nav.Link>
                   <Nav.Link>
                     <Link className="nav-link" to="/contact">Contact</Link>

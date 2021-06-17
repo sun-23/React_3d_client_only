@@ -8,11 +8,11 @@ export default function Footer() {
                 <div className="row">
                     <div className="col-12 col-md">
                         <h5 className="fw-bold">3DSun</h5>
-                        <p>© 2021–2021</p>
+                        <p className="mt-3">© 2021–2021</p>
                     </div>
                     <div className="col-6 col-md">
-                        <p className="fw-bold">ข้อมูล</p>
-                        <Link className="text-light" to="/contact">ติดต่อเรา</Link>
+                        <p className="fw-bold">About</p>
+                        <Link className="text-light" to="/contact">Contact Us</Link>
                     </div>
                 </div>
             </div>

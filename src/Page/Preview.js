@@ -129,7 +129,7 @@ function Preview() {
           {show ? <div>
             {stl_cal ? <div>
                 <h3>Result</h3>
-                <p>price: {price.toFixed(2)}</p>
+                <p>price: {price.toFixed(2)} bath</p>
                 <p>volume: {(stl_cal.volume * (size / 100) * (size / 100) * (size / 100)).toFixed(2)} cm^3</p>
                 <p>W: {(stl_cal.boundingBox[1] / 10 * size / 100).toFixed(2)} cm</p>
                 <p>D: {(stl_cal.boundingBox[0] / 10 * size / 100).toFixed(2)} cm</p>

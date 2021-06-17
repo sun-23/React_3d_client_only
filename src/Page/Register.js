@@ -1,7 +1,8 @@
 import { Form, Card, Button, Alert } from 'react-bootstrap'
 import { useRef, useState } from 'react'
 import { useAuth } from '../context/AuthContext'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
+import { db } from '../firebase/firebase'
 
 export default function Register() {
     const emailRef = useRef();
@@ -9,14 +10,25 @@ export default function Register() {
     const { signup } = useAuth() //context
     const [error, setError] = useState('')
     const [loading, setLoading] = useState(false)
+    const history = useHistory()
 
     async function handleSignup(e)  {
         await setError('');
         await setLoading(true)
         e.preventDefault();
 
-        await signup(emailRef.current.value, passwordRef.current.value).then((value) =>{
-            console.log(value);
+        await signup(emailRef.current.value, passwordRef.current.value).then(async (userCredential) =>{
+            console.log(userCredential.user.uid);
+            await db.collection("users").doc(userCredential.user.uid).set({
+                    address: 'You haven not added the address yet.'
+                })
+                .then(() => {
+                    console.log("Document successfully written!");
+                    history.push('/dashboard')
+                })
+                .catch((error) => {
+                    console.error("Error writing document: ", error);
+                });
             setLoading(false)
         }).catch((error) => {
             console.log('error', error);
