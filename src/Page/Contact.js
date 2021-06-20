@@ -2,10 +2,10 @@ import { useState } from 'react'
 import { Button } from 'react-bootstrap'
 
 export default function Contact() {
-    const [email,setEmail] = useState();
-    const [subject,setSubject] = useState();
-    const [name,setName] = useState();
-    const [text,setText] = useState();
+    const [email,setEmail] = useState('');
+    const [subject,setSubject] = useState('');
+    const [name,setName] = useState('');
+    const [text,setText] = useState('');
 
     const setTextEmail = (e)=> {
         setEmail(e.target.value)
@@ -25,7 +25,7 @@ export default function Contact() {
 
     return (
         <div className="m-5">
-            <div className="container">
+            <div className="container w-50">
                 <div class="mb-3">
                     <label class="form-label">Email address</label>
                     <input type="email" class="form-control" onChange={setTextEmail} value={email} placeholder="name@example.com"/>

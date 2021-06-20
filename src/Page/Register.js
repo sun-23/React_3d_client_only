@@ -38,26 +38,28 @@ export default function Register() {
     }
 
     return(
-        <div className="container m-5">
-            <Card>
-                <Card.Body>
-                    <h2 className="text-center mb-4">Sign Up</h2>
-                    {error && <Alert variant="danger">{error}</Alert>}
-                    <Form onSubmit={handleSignup}>
-                        <Form.Group id="email">
-                            <Form.Label>Email</Form.Label>
-                            <Form.Control type="email" ref={emailRef} required/>
-                        </Form.Group>
-                        <Form.Group id="password">
-                            <Form.Label>Password</Form.Label>
-                            <Form.Control type="password" ref={passwordRef} required/>
-                        </Form.Group>
-                        <Button disabled={loading} className="w-100 mt-4" type="submit">Sign Up</Button>
-                    </Form>
-                </Card.Body>
-            </Card>
-            <div className="w-100 text-center mt-2">
-                Aready have an account? <Link to="/login">Log In</Link>
+        <div className="m-5">
+            <div className="container w-50">
+                <Card>
+                    <Card.Body>
+                        <h2 className="text-center mb-4">Sign Up</h2>
+                        {error && <Alert variant="danger">{error}</Alert>}
+                        <Form onSubmit={handleSignup}>
+                            <Form.Group id="email">
+                                <Form.Label>Email</Form.Label>
+                                <Form.Control type="email" ref={emailRef} required/>
+                            </Form.Group>
+                            <Form.Group id="password">
+                                <Form.Label>Password</Form.Label>
+                                <Form.Control type="password" ref={passwordRef} required/>
+                            </Form.Group>
+                            <Button disabled={loading} className="w-100 mt-4" type="submit">Sign Up</Button>
+                        </Form>
+                    </Card.Body>
+                </Card>
+                <div className="w-100 text-center mt-2">
+                    Aready have an account? <Link to="/login">Log In</Link>
+                </div>
             </div>
         </div>
     )
