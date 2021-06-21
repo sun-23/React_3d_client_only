@@ -1,5 +1,8 @@
 import { useState } from "react";
+import { storage } from "../firebase/firebase";
+import { useAuth } from "../context/AuthContext";
 import {ScaleLoader} from 'react-spinners';
+import { Button } from "react-bootstrap"
 import STLViewer from '../Component/STLViewer';
 import Select_material from '../Component/Select_material'
 import Select_infill from '../Component/Select_infill'
@@ -12,12 +15,15 @@ function Preview() {
   const [stl_file, setFile] = useState();
   const [stl_cal, setSTL_Cal] = useState();
   const [show, setShow] = useState(false);
+  const [disBtn, setDisBtn] = useState(false);
   const [material, setMaterial] = useState(1.27);
   const [infill, setInfill] = useState(40);
   const [size, setSize] = useState(100);
   const [quality, setQuality] = useState(1);
   const [price, setPrice] = useState(0);
   const [message, setMessage] = useState('please click submit button');
+  const [uploadmessage, setUpMessage] = useState('');
+  const { currentUser } = useAuth();
 
   const selectFile = (e) => {
     var file = e.target.files[0];
@@ -26,7 +32,7 @@ function Preview() {
       setSTL_Cal(null);
       setFile(file);
       setPrice(0);
-      setMessage('please click submit button');
+      setMessage('Please click submit button');
     } else {
       alert(' Invalid file type. Only STL files are supported. Please select a new file. ');
     }
@@ -35,16 +41,30 @@ function Preview() {
   const submitStl = async () => {
     setShow(false);
     setSTL_Cal(null);
+    setDisBtn(true);
     if(stl_file){
       console.log(stl_file);
       setShow(true)
-      stl_file.arrayBuffer().then((arrayBuffer) => {
+      stl_file.arrayBuffer().then(async (arrayBuffer) => {
         var buffer = Buffer.from(arrayBuffer);
-        var stl = new NodeStl(buffer, {density: material});
+        var stl = await new NodeStl(buffer, {density: material});
         console.log(stl);
         setSTL_Cal(stl)
         calculatingPrice(stl);
+        if(currentUser){
+          setUpMessage('file uploading... to 3DSun storage');
+          const storageRef = storage.ref();
+          console.log('users_files/'+ currentUser.uid + "/" +stl_file.name);
+          await storageRef.child('users_files/'+ currentUser.uid + "/" +stl_file.name)
+            .put(buffer).then(() => {
+              setUpMessage('');
+            }).catch(() => {
+              setUpMessage('upload file failed');
+            })
+        }
+        await setDisBtn(false);
       });
+
     } else {
       alert('Please select file');
     }
@@ -118,8 +138,11 @@ function Preview() {
               ></input>
             </div>
             <div className="col">
-              <input className="btn btn-primary" type="submit" onClick={submitStl}></input>
+              <Button type="submit" onClick={submitStl}  disabled={disBtn}>Submit</Button>
             </div>
+            {uploadmessage ? (<div className="col">
+              <p className="alert alert-warning">{uploadmessage}</p>
+            </div>) : null}
           </div>
           <div>
             <Select_material onChangeMaterial={changeMaterial} />
