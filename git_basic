@@ -3,3 +3,5 @@ git add . ===> add all file
 git add file ===> add file
 
 git status ===> see file status
+
+add _redirects file to /public to fixed page refresh 404
