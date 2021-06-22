@@ -24,8 +24,8 @@ export default function Contact() {
     }
 
     return (
-        <div className="m-5">
-            <div className="container w-50">
+        <div className="mt-5 mb-5">
+            <div className="container w-50" style={{ minWidth: "300px" }}>
                 <div class="mb-3">
                     <label class="form-label">Email address</label>
                     <input type="email" class="form-control" onChange={setTextEmail} value={email} placeholder="name@example.com"/>

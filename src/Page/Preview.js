@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { storage } from "../firebase/firebase";
 import { useAuth } from "../context/AuthContext";
 import {ScaleLoader} from 'react-spinners';
@@ -10,6 +10,29 @@ import Slider_modelsize from '../Component/Slider_modelsize'
 import Select_Quanlity from '../Component/Select_Quality'
 import NodeStl from "../stl" ;
 var Buffer = require("buffer/").Buffer;
+
+function getWindowDimensions() {
+  const { innerWidth: width, innerHeight: height } = window;
+  return {
+    width,
+    height
+  };
+}
+
+function useWindowDimensions() {
+  const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions());
+
+  useEffect(() => {
+    function handleResize() {
+      setWindowDimensions(getWindowDimensions());
+    }
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  return windowDimensions;
+}
 
 function Preview() {
   const [stl_file, setFile] = useState();
@@ -24,6 +47,7 @@ function Preview() {
   const [message, setMessage] = useState('please click submit button');
   const [uploadmessage, setUpMessage] = useState('');
   const { currentUser } = useAuth();
+  const { height, width } = useWindowDimensions();
 
   const selectFile = (e) => {
     var file = e.target.files[0];
@@ -110,10 +134,12 @@ function Preview() {
   }
 
   return (
-    <div className="m-5">
-      <div className="d-flex justify-content-center container">
+    <div className="mt-5 mb-5">
+      {/* <h1>{width}</h1> */}
+      <div className={(width < 768) ? "container" : "d-flex justify-content-center container"}> {/* d-flex justify-content-center  */}
         <div>
-          {show ? <STLViewer
+          {
+            (width > 360) ? show ? <STLViewer
             onSceneRendered={(element) => {
                 console.log(element)
             }}
@@ -122,9 +148,11 @@ function Preview() {
             className="obj"
             modelColor="#185adb"
             backgroundColor="#f0f0f0"
-            scale={(size/100)}/>
-          : <div className="rounded" style={{width: "400px" , height: "400px", backgroundColor: "gray"}}>
-          </div> }
+            width={(width < 400) ? 350 : 400}
+            height={(width < 400) ? 350 : 400}
+            scale={(size/100)}/> : <div className="rounded" style={{width: (width < 400) ? "350px" : "400px",height: (width < 400) ? "350px" : "400px", backgroundColor: "gray"}}>
+          </div> : null
+          }
         </div>
         <div className="form-control">
           <h2>Preview 3d stl model</h2>

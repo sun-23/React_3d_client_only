@@ -28,8 +28,8 @@ export default function Login() {
     }
 
     return(
-        <div className="m-5">
-            <div className="container w-50">
+        <div className="mt-5 mb-5">
+            <div className="container w-50" style={{ minWidth: "300px" }}>
                 <Card>
                     <Card.Body>
                         <h2 className="text-center mb-4">Log In</h2>
