@@ -44,7 +44,7 @@ export default function Dashboard() {
           // xhr.responseType = 'blob';
           // xhr.onload = async (event) => {
           //   var blob = xhr.response;
-          //   var file = new File([blob], itemRef.name); //not use because stl can use url
+          //   var file = new File([blob], itemRef.name); //not use because stlviewer can use url
           //   setFiles(old => [...old, { "name": itemRef.name, "url": url, "File": file }])
           // };
           // xhr.open('GET', url);
