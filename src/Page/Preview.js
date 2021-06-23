@@ -65,8 +65,8 @@ function Preview() {
   const submitStl = async () => {
     setShow(false);
     setSTL_Cal(null);
-    setDisBtn(true);
     if(stl_file){
+      setDisBtn(true);
       console.log('stl_file',stl_file);
       setShow(true)
       stl_file.arrayBuffer().then(async (arrayBuffer) => {
