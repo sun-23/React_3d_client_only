@@ -1,13 +1,21 @@
 import React, { useEffect, useState } from 'react'
 import { Card, Button, Col, Row } from "react-bootstrap"
 import { Link } from 'react-router-dom'
+import STLViewer from '../Component/STLViewer';
 
 function PreviewCard({file, onDelete}) {
     return (
-        <Card className="m-5">
+        <Card className="mt-5">
             <Card.Body>
                 <Row>
                     <Col>
+                        <STLViewer url={file.url}
+                        className="mb-2"
+                        modelColor="#185adb"
+                        backgroundColor="#f0f0f0"
+                        width={200}
+                        height={200}
+                        scale={1}/>
                         <Card.Title className=" mr-auto w-100">{file.name}</Card.Title>
                     </Col>
                     <Col xs lg="2">
@@ -28,6 +36,7 @@ function PreviewCard({file, onDelete}) {
 }
 
 export default function Files({files, onDelete}) {
+
     return (
         <Card>
             <Card.Body>

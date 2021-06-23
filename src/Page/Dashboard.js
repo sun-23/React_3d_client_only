@@ -3,6 +3,7 @@ import { Card, Button, Alert, Tab, Col, Nav } from "react-bootstrap"
 import { useAuth } from "../context/AuthContext"
 import { Link, useHistory } from "react-router-dom"
 import { storage, db } from '../firebase/firebase'
+var Buffer = require("buffer/").Buffer;
 
 //page
 import Order from "./Order"
@@ -34,7 +35,21 @@ export default function Dashboard() {
     listFileRef.listAll().then(res => {
       res.items.forEach(itemRef => {
         itemRef.getDownloadURL().then(url => {
-          setFiles(old => [...old, {"name":itemRef.name,"url": url}])
+          // set cors to down load blob from browser
+          // cd to google-cloud-sdk/bin folder
+          // create cors.json file content [{ "origin": ["*"],"method": ["GET"],"maxAgeSeconds": 3600}]
+          // ./gsutil cors set cors.json gs://<your-cloud-storage-bucket>
+
+          // var xhr = new XMLHttpRequest();
+          // xhr.responseType = 'blob';
+          // xhr.onload = async (event) => {
+          //   var blob = xhr.response;
+          //   var file = new File([blob], itemRef.name); //not use because stl can use url
+          //   setFiles(old => [...old, { "name": itemRef.name, "url": url, "File": file }])
+          // };
+          // xhr.open('GET', url);
+          // xhr.send();
+          setFiles(old => [...old, { "name": itemRef.name, "url": url }])
         });
       });
     }).catch((error) => {

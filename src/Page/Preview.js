@@ -67,7 +67,7 @@ function Preview() {
     setSTL_Cal(null);
     setDisBtn(true);
     if(stl_file){
-      console.log(stl_file);
+      console.log('stl_file',stl_file);
       setShow(true)
       stl_file.arrayBuffer().then(async (arrayBuffer) => {
         var buffer = Buffer.from(arrayBuffer);
