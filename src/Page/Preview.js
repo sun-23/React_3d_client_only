@@ -1,14 +1,17 @@
 import { useState, useEffect } from "react";
 import { storage } from "../firebase/firebase";
 import { useAuth } from "../context/AuthContext";
-import {ScaleLoader} from 'react-spinners';
+import { ScaleLoader } from 'react-spinners';
 import { Button } from "react-bootstrap"
+import { Link } from "react-router-dom"
 import STLViewer from '../Component/STLViewer';
 import Select_material from '../Component/Select_material'
 import Select_infill from '../Component/Select_infill'
 import Slider_modelsize from '../Component/Slider_modelsize'
 import Select_Quanlity from '../Component/Select_Quality'
 import NodeStl from "../stl" ;
+import { db } from "../firebase/firebase"
+import { v4 as uuidv4 } from 'uuid';
 var Buffer = require("buffer/").Buffer;
 
 function getWindowDimensions() {
@@ -36,6 +39,7 @@ function useWindowDimensions() {
 
 function Preview() {
   const [stl_file, setFile] = useState();
+  const [stl_url, setFileUrl] = useState("");
   const [stl_cal, setSTL_Cal] = useState();
   const [show, setShow] = useState(false);
   const [disBtn, setDisBtn] = useState(false);
@@ -78,13 +82,19 @@ function Preview() {
         if(currentUser){
           setUpMessage('file uploading... to 3DSun storage');
           const storageRef = storage.ref();
-          console.log('users_files/'+ currentUser.uid + "/" +stl_file.name);
-          await storageRef.child('users_files/'+ currentUser.uid + "/" +stl_file.name)
+          console.log('users_files/'+ currentUser.uid + "/" + stl_file.name);
+          await storageRef.child('users_files/'+ currentUser.uid + "/" + stl_file.name)
             .put(buffer).then(() => {
               setUpMessage('');
             }).catch(() => {
               setUpMessage('upload file failed');
             })
+          await storageRef.child('users_files/'+ currentUser.uid + "/" + stl_file.name).getDownloadURL().then((url) => {
+            console.log("get url");
+            setFileUrl(url);
+          }).catch((error) => {
+            console.log("cannot get url", url);
+          })
         }
         await setDisBtn(false);
       });
@@ -131,6 +141,33 @@ function Preview() {
     setSTL_Cal(null);
     setShow(false)
     setMessage('please click submit button');
+  }
+
+  const createCart = () => {
+    if(stl_cal && price && currentUser){
+      const id = uuidv4()
+      const cartObject = {
+        "ID": id,
+        "userID": currentUser.uid,
+        "price": price.toFixed(2),
+        "file_name": stl_file.name,
+        "file_storage_url": stl_url,
+        "material": material == 1.27 ? "PETG" : "PLA",
+        "layer_height": quality == 1 ? 0.2 : quanlity == 1.1 ? 0.15 : 0.3,
+        "percent_size": size,
+        "percent_infill": infill-20,
+        "Date": new Date()
+      }
+      console.log('cart', cartObject);
+      db.collection('cart').doc(id).set(cartObject).then(() => {
+        alert('add to cart successed')
+      }).catch((error) => {
+        alert('add to cart failed')
+        console.log('error');
+      })
+    }else{
+      setMessage('please click submit button')
+    }
   }
 
   return (
@@ -197,7 +234,11 @@ function Preview() {
                     loading={true}/>
               </div>}
               </div> : 
-            <p className="alert alert-danger">{message}!</p>}
+            <p className="alert alert-warning">{message}!</p>}
+            {currentUser ? <Button onClick={createCart} disabled={disBtn}>
+              Add to cart
+            </Button> : <Link className=" btn btn-primary" 
+              to="/signup">Log In and order now</Link>}
           </div>
         </div>
       </div>

@@ -18,7 +18,8 @@ import Dashboard from "./Page/Dashboard"
 import Contact from './Page/Contact'
 import ForgotPassword from './Page/ForgotPassword'
 import UpdateProfile from './Page/UpdateProfile'
-import Page404 from "./Page/404";
+import Page404 from "./Page/404"
+import Cart from "./Page/Cart"
 
 //component
 import Footer from './Component/Footer'
@@ -40,6 +41,7 @@ function App() {
               <Route path="/forgot-password" component={ForgotPassword} />
               <PrivateRoute path="/dashboard" component={Dashboard}/>
               <PrivateRoute path="/update-profile" component={UpdateProfile}/>
+              <PrivateRoute path="/cart" component={Cart}/>
               <Route path="*" component={Page404}/>
             </Switch>
             <Footer/>

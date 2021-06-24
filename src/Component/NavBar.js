@@ -42,6 +42,9 @@ export default function NavBar() {
                         <Link className="nav-link" to="/dashboard">{currentUser && currentUser.email}</Link>
                       </Nav.Link>
                       <Nav.Link>
+                        <Link className="nav-link" to="/cart">Cart</Link>
+                      </Nav.Link>
+                      <Nav.Link>
                         {/* <Button variant="secondary" onClick={handleLogout} style={{textDecoration: "none",  color: "lightgray"}}>Log Out</Button> */}
                         <Link className="nav-link" onClick={handleLogout}>Log Out</Link>
                       </Nav.Link>
