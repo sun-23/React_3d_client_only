@@ -3,7 +3,7 @@ import { storage } from "../firebase/firebase";
 import { useAuth } from "../context/AuthContext";
 import { ScaleLoader } from 'react-spinners';
 import { Button } from "react-bootstrap"
-import { Link } from "react-router-dom"
+import { Link, useHistory } from "react-router-dom"
 import STLViewer from '../Component/STLViewer';
 import Select_material from '../Component/Select_material'
 import Select_infill from '../Component/Select_infill'
@@ -52,6 +52,7 @@ function Preview() {
   const [uploadmessage, setUpMessage] = useState('');
   const { currentUser } = useAuth();
   const { height, width } = useWindowDimensions();
+  const history = useHistory()
 
   const selectFile = (e) => {
     var file = e.target.files[0];
@@ -71,18 +72,18 @@ function Preview() {
     setSTL_Cal(null);
     if(stl_file){
       setDisBtn(true);
-      console.log('stl_file',stl_file);
+      //console.log('stl_file',stl_file);
       setShow(true)
       stl_file.arrayBuffer().then(async (arrayBuffer) => {
         var buffer = Buffer.from(arrayBuffer);
         var stl = await new NodeStl(buffer, {density: material});
-        console.log(stl);
+        //console.log(stl);
         setSTL_Cal(stl)
         calculatingPrice(stl);
         if(currentUser){
           setUpMessage('file uploading... to 3DSun storage');
           const storageRef = storage.ref();
-          console.log('users_files/'+ currentUser.uid + "/" + stl_file.name);
+          //console.log('users_files/'+ currentUser.uid + "/" + stl_file.name);
           await storageRef.child('users_files/'+ currentUser.uid + "/" + stl_file.name)
             .put(buffer).then(() => {
               setUpMessage('');
@@ -90,7 +91,7 @@ function Preview() {
               setUpMessage('upload file failed');
             })
           await storageRef.child('users_files/'+ currentUser.uid + "/" + stl_file.name).getDownloadURL().then((url) => {
-            console.log("get url");
+            //console.log("get url");
             setFileUrl(url);
           }).catch((error) => {
             console.log("cannot get url", url);
@@ -148,12 +149,13 @@ function Preview() {
       const id = uuidv4()
       const cartObject = {
         "ID": id,
+        "quantity": 1,
         "userID": currentUser.uid,
         "price": price.toFixed(2),
         "file_name": stl_file.name,
         "file_storage_url": stl_url,
         "material": material == 1.27 ? "PETG" : "PLA",
-        "layer_height": quality == 1 ? 0.2 : quanlity == 1.1 ? 0.15 : 0.3,
+        "layer_height": quality == 1 ? 0.2 : quality == 1.1 ? 0.15 : 0.3,
         "percent_size": size,
         "percent_infill": infill-20,
         "Date": new Date()
@@ -161,9 +163,10 @@ function Preview() {
       console.log('cart', cartObject);
       db.collection('cart').doc(id).set(cartObject).then(() => {
         alert('add to cart successed')
+        history.push('/cart')
       }).catch((error) => {
         alert('add to cart failed')
-        console.log('error');
+        console.log('error', error);
       })
     }else{
       setMessage('please click submit button')

@@ -57,7 +57,7 @@ export default function Register() {
     useEffect(() => {
         const sub = db.collection("users").doc(currentUser.uid)
             .onSnapshot((doc) => {
-                console.log("Current data: ", doc.data());
+                // console.log("Current data: ", doc.data());
                 setCurrentAddress(doc.data().address);
             });
         return () => {

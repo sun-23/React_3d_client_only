@@ -32,37 +32,30 @@ function PreviewCard({file, onDelete}) {
             });
     }, [])
 
-    return (
-        <Card className="mt-5">
+    return ( 
+        <Card className="m-1" style={{ width: '261px' }}>
             <Card.Body>
-                <Row>
-                    <Col>
-                        <STLViewer url={file.url}
-                        className="mb-2"
-                        modelColor="#185adb"
-                        backgroundColor="#f0f0f0"
-                        width={200}
-                        height={200}
-                        scale={1}/>
-                        <Card.Title className=" mr-auto w-100">{file.name}</Card.Title>
-                    </Col>
-                    <Col xs lg="2">
-                        {isDelete ?
-                            <Button 
-                            className="ml-auto w-100" 
-                            variant="danger" 
-                            onClick={() => {
-                                onDelete(file.url)
-                            }}
-                        >
-                            Delete
-                        </Button> : <p className="ml-auto w-100 alert alert-warning text-center">
-                            your file is in cart or order
-                        </p>
-                        }
-                        {/* <p>{isDelete ? "true": "false"}</p> */}
-                    </Col>
-                </Row>
+                <STLViewer url={file.url}
+                className="mt-2 mb-1"
+                modelColor="#185adb"
+                backgroundColor="#f0f0f0"
+                width={200}
+                height={200}
+                scale={1}/>
+                <Card.Text>{file.name}</Card.Text>
+                {isDelete ?
+                    <Button  
+                    variant="danger" 
+                    onClick={() => {
+                        onDelete(file.url)
+                    }}
+                >
+                    Delete
+                </Button> : <p className="alert alert-warning text-center">
+                    your file is in cart or order
+                </p>
+                }
+                {/* <p>{isDelete ? "true": "false"}</p> */}
             </Card.Body>
         </Card>
     )
@@ -76,11 +69,13 @@ export default function Files({files, onDelete}) {
                 <h2 className="text-center mb-4">User Files</h2>
                 <p className="text-center mb-4">want to upload file? <Link to="/instantqoutation"> upload file </Link></p>
                 {console.log('list_files',files)}
-                {files.length > 0 ? (files.map((file, index) => {
-                    // console.log('test map',index,file);
-                    // return <p key={index}>{file.name}</p>
-                    return <PreviewCard file={file} onDelete={onDelete}/>
-                })) : <p className="text-center mb-4 alert alert-warning">file is not uploaded</p> }
+                <Row>
+                    {files.length > 0 ? (files.map((file, index) => {
+                        // console.log('test map',index,file);
+                        // return <p key={index}>{file.name}</p>
+                        return <PreviewCard file={file} onDelete={onDelete}/>
+                    })) : <p className="text-center mb-4 alert alert-warning">file is not uploaded</p> }
+                </Row>
             </Card.Body>
         </Card>
     )
