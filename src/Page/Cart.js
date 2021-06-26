@@ -82,7 +82,7 @@ function PreviewCart({cart, onDelete, onChangeQuantity}) {
         <Card className="mt-5">
             <Card.Body>
                 <Row>
-                    <Col sm={2} style={{minWidth: "210px"}}>
+                    <Col xl={2} style={{minWidth: "210px"}}>
                         <STLViewer url={cart.file_storage_url}
                         className="mb-2"
                         modelColor="#185adb"
@@ -91,19 +91,19 @@ function PreviewCart({cart, onDelete, onChangeQuantity}) {
                         height={200}
                         scale={1}/>
                     </Col>
-                    <Col sm={4}>
+                    <Col xl={4}>
                         <Card.Title className=" mr-auto w-100">{cart.file_name}</Card.Title>
                         <Card.Text>Layer Height: {cart.layer_height} mm</Card.Text>
                         <Card.Text>Material: {cart.material}</Card.Text>
                         <Card.Text>Infill: {cart.percent_infill}%</Card.Text>
                         <Card.Text>Size: {cart.percent_size}%</Card.Text>
                     </Col>
-                    <Col sm={2}>
+                    <Col xl={2}>
                         <Row>
-                            <Col sm={5}>
+                            <Col xs={8} sm={2}  md={2} xl={6}>
                                 <Card.Text>Quantity:</Card.Text>
                             </Col>
-                            <Col sm={7}>
+                            <Col xs={4} sm={10} md={10} xl={6}>
                                 <ButtonGroup aria-label="Basic example">
                                     <Button variant="secondary" onClick={(e) => onChangeQuantity(cart,e.currentTarget.value)} value={-1}>-</Button>
                                     <Card.Text className="text-center" style={{width: "25px"}}>{cart.quantity}</Card.Text>
@@ -112,10 +112,10 @@ function PreviewCart({cart, onDelete, onChangeQuantity}) {
                             </Col>
                         </Row>
                     </Col>
-                    <Col sm={2}>
+                    <Col xl={2}>
                         <Card.Title>Price: {cart.price} baht/pcs</Card.Title>
                     </Col>
-                    <Col sm={2}>
+                    <Col xl={2}>
                         <Button 
                         className="w-100" 
                         variant="danger" 
