@@ -108,7 +108,7 @@ export default function Cart() {
         try {
             const res = await axios({
                 method: "post",
-                url: "https://nodejs-react3d-omise-payment.herokuapp.com/",
+                url: "https://nodejs-react3d-omise-payment.herokuapp.com/checkout-credit-card",
                 data: {
                     "email": currentUser.email,
                     "amount": 100 * TotalPrice,
