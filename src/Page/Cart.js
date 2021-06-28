@@ -1,19 +1,24 @@
 import React, { useEffect, useState } from 'react'
-import { Button, Card, Row, Col, ButtonGroup } from 'react-bootstrap';
+import { Button, Card, Row, Col, ButtonGroup, Form } from 'react-bootstrap';
 import { db } from '../firebase/firebase'
 import { useAuth } from '../context/AuthContext'
 import STLViewer from '../Component/STLViewer';
 import { Link } from 'react-router-dom'
+import { v4 as uuidv4 } from 'uuid';
 //todo read cart db
 
+let OmiseCard;
 export default function Cart() {
 
     const { currentUser } = useAuth();
     const [Allcart, setAllcart] = useState([]);
     const [TotalPrice,setTotalPrice] = useState(0);
+    const [orderId, setOrderID] = useState(uuidv4());
+    OmiseCard = window.OmiseCard;
 
     useEffect(() => {
         //effect
+        loadOmise()
         setAllcart([])
         setTotalPrice(0)
         const sub = db.collection("cart").where("userID", "==", currentUser.uid)
@@ -61,12 +66,61 @@ export default function Cart() {
         }
     }
 
+    const loadOmise = () => {
+        console.log('process env', process.env)
+        OmiseCard.configure({
+            publicKey: process.env.REACT_APP_OMISE_PUBLIC,
+            currency: "thb",
+            frameLabel: "3DSun",
+            submitLabel: "PAY CARD NOW",
+            button: "Pay with Omise",
+        });
+    }
+
+    const creditCardConfigure = () => {
+        OmiseCard.configure({
+            defaultPaymentMethod: 'credit_card',
+            ortherPaymentMethod: []
+        });
+        OmiseCard.configureButton('#credit_card');
+        OmiseCard.attach();
+    }
+
+    const omiseTokenHandler = () => {
+        OmiseCard.open({
+            amount: 10000,
+            frameDescription: 'Invoice ' + String(orderId),
+            onCreateTokenSuccess: (nonce) => {
+                /* Handler on token or source creation.  Use this to submit form or send ajax request to server */
+                console.log('omise token ', nonce);
+            },
+            onFormClosed: () => {},
+        })
+    }
+
+    const handleCheckout = (e) => {
+        e.preventDefault()
+        creditCardConfigure()
+        omiseTokenHandler()
+    }
+
     return (
         <Card>
             <Card.Body>
                 <h2 className="text-center mb-4">Cart</h2>
                 <p className="text-center mb-4"> want instant qoute? <Link to="/instantqoutation"> instant qoute </Link></p>
-                <h4 className="text-center">total price {TotalPrice} baht</h4>
+                <Form>
+                    <Row>
+                        <Col>
+                            <h4 className="text-center">total price {TotalPrice} baht</h4>
+                        </Col>
+                        <Col>
+                            <Button id="credit_card" variant="primary" type="button" onClick={(e) => handleCheckout(e)}>
+                                Pay with Credit Card
+                            </Button>
+                        </Col>
+                    </Row>
+                </Form>
                 {console.log('cart',Allcart)}
                 {Allcart.length > 0 ? (Allcart.map((cart) => {
                     return <PreviewCart key={cart.id} onChangeQuantity={onChangeQuantity} cart={cart} onDelete={onDelete}/>
