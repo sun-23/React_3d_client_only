@@ -81,7 +81,7 @@ function Preview() {
         setSTL_Cal(stl)
         calculatingPrice(stl);
         if(currentUser){
-          setUpMessage('file uploading... to 3DSun storage');
+          setUpMessage('file is uploading... to 3DSun storage');
           const storageRef = storage.ref();
           //console.log('users_files/'+ currentUser.uid + "/" + stl_file.name);
           await storageRef.child('users_files/'+ currentUser.uid + "/" + stl_file.name)
@@ -94,7 +94,7 @@ function Preview() {
             //console.log("get url");
             setFileUrl(url);
           }).catch((error) => {
-            console.log("cannot get url", url);
+            //console.log("cannot get url", url);
           })
         }
         await setDisBtn(false);

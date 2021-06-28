@@ -45,7 +45,7 @@ export default function Order() {
         <Card>
             <Card.Body>
                 <h2 className="text-center mb-4">Orders</h2>
-                {console.log('orders', orders)}
+                {/* {console.log('orders', orders)} */}
                 {orders.length > 0 ? orders.map((order) => {
                     return <OrderDetail order={order}/>
                 }) : null}

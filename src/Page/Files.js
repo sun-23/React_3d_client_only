@@ -24,22 +24,21 @@ function PreviewCard({file, onDelete}) {
                     if(doc.data().file_name === file.name){
                         setDelete(false);
                     }
-                    return
                 });
             })
             .catch((error) => {
                 console.log("Error getting documents: ", error);
             });
 
-        db.collection("cart").where("userId", "==", currentUser.uid)
+        db.collection("order").where("userId", "==", currentUser.uid)
             .get()
             .then((querySnapshot) => {
                 querySnapshot.forEach((doc) => {
-                    doc.Product.map((model) => {
+                    doc.data().Product.map((model) => {
+                        //console.log('match', model.file_name, file.name, model.file_name === file.name);
                         if(model.file_name === file.name){
                             setDelete(false);
                         }
-                        return
                     })   
                 });
             })
@@ -84,7 +83,7 @@ export default function Files({files, onDelete}) {
             <Card.Body>
                 <h2 className="text-center mb-4">User Files</h2>
                 <p className="text-center mb-4">want to upload file? <Link to="/instantqoutation"> upload file </Link></p>
-                {console.log('list_files',files)}
+                {/* {console.log('list_files',files)} */}
                 <Row>
                     {files.length > 0 ? (files.map((file, index) => {
                         // console.log('test map',index,file);

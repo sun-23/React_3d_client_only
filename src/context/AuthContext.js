@@ -32,9 +32,9 @@ export function AuthProvider({children}) {
         const unsub = db;
         const unsubscriberUserAuth = auth.onAuthStateChanged(user => {
             setCurrentUser(user)
-            unsub =  db.collection("users").doc(user.uid).onSnapshot((doc) => {
-            console.log("Current data: ", doc.data());
-            setAddress(doc.data().address);
+            unsub =  db.collection("users").doc(user.uid).onSnapshot(async (doc) => {
+            console.log("Current data: ", await doc.data());
+            setAddress(await doc.data().address);
         });
         })
         return () => {
