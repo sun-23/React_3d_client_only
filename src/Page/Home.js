@@ -17,7 +17,7 @@ export default function Home() {
                 <div style={{margin:"auto"}}>
                     <h1 className="fw-bold">3D Priting Services</h1>
                     <p>Create your own product at the most affordable price</p>
-                    <p>Start from 100 baht</p>
+                    <p>Start from 100 baht with free shipping</p>
                 </div>
             </div>
             <div style={{

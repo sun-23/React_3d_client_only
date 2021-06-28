@@ -19,6 +19,7 @@ import Contact from './Page/Contact'
 import ForgotPassword from './Page/ForgotPassword'
 import UpdateProfile from './Page/UpdateProfile'
 import Page404 from "./Page/404"
+import Policy from "./Page/Policy"
 import Cart from "./Page/Cart"
 
 //component
@@ -39,6 +40,7 @@ function App() {
               <Route path="/login" component={Login}/>
               <Route path="/contact" component={Contact}/>
               <Route path="/forgot-password" component={ForgotPassword} />
+              <Route path="/policy" component={Policy}/>
               <PrivateRoute path="/dashboard" component={Dashboard}/>
               <PrivateRoute path="/update-profile" component={UpdateProfile}/>
               <PrivateRoute path="/cart" component={Cart}/>
