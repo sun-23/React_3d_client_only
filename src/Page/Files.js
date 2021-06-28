@@ -30,6 +30,22 @@ function PreviewCard({file, onDelete}) {
             .catch((error) => {
                 console.log("Error getting documents: ", error);
             });
+
+        db.collection("cart").where("userId", "==", currentUser.uid)
+            .get()
+            .then((querySnapshot) => {
+                querySnapshot.forEach((doc) => {
+                    doc.Product.map((model) => {
+                        if(model.file_name === file.name){
+                            setDelete(false);
+                        }
+                        return
+                    })   
+                });
+            })
+            .catch((error) => {
+                console.log("Error getting documents: ", error);
+            });
     }, [])
 
     return ( 
