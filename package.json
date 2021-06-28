@@ -8,6 +8,7 @@
   ],
   "main": "src/index.js",
   "dependencies": {
+    "axios": "^0.21.1",
     "bootstrap": "^5.0.1",
     "buffer": "6.0.3",
     "cura-wasm": "^1.5.2",

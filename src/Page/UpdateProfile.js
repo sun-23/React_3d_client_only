@@ -3,21 +3,19 @@ import { useRef, useState } from 'react'
 import { useAuth } from '../context/AuthContext'
 import { Link } from 'react-router-dom'
 import { db } from '../firebase/firebase'
-import { useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
 
 export default function Register() {
     const addressRef = useRef();
     const passwordRef = useRef();
-    const { currentUser } = useAuth();
+    const { currentUser, userAddress } = useAuth();
     const [error1, setError1] = useState('');
     const [message1, setMessage1] = useState('');
     const [error2, setError2] = useState('');
     const [loading, setLoading] = useState(false);
-    const [currentAddress, setCurrentAddress] = useState('');
     const history = useHistory();
 
-    async function handleSignup(e)  {
+    async function handleUpdate(e)  {
         e.preventDefault();
         setError1('');
         setMessage1('');
@@ -53,18 +51,6 @@ export default function Register() {
             console.log('password is not updated');
         }
     }
-    
-    useEffect(() => {
-        const sub = db.collection("users").doc(currentUser.uid)
-            .onSnapshot((doc) => {
-                // console.log("Current data: ", doc.data());
-                setCurrentAddress(doc.data().address);
-            });
-        return () => {
-            // cleanup
-            sub();
-        }
-    }, [])
 
     return(
         <div className="m-5">
@@ -75,14 +61,14 @@ export default function Register() {
                         {error1 && <Alert variant="danger">{error1}</Alert>}
                         {error2 && <Alert variant="danger">{error2}</Alert>}
                         {message1 && <Alert variant="success">{message1}</Alert>}
-                        <Form onSubmit={handleSignup}>
+                        <Form onSubmit={handleUpdate}>
                             <Form.Group id="password">
                                 <Form.Label>Password</Form.Label>
                                 <Form.Control type="password" ref={passwordRef} placeholder="Leave blank to keep the same"/>
                             </Form.Group>
                             <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
                                 <Form.Label>Address</Form.Label>
-                                <Form.Control as="textarea" ref={addressRef} rows={3} placeholder={currentAddress}/>
+                                <Form.Control as="textarea" ref={addressRef} rows={3} placeholder={userAddress}/>
                             </Form.Group>
                             <Button disabled={loading} className="w-100 mt-4" type="submit">Update Address</Button>
                         </Form>

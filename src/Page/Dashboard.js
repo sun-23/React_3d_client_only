@@ -2,8 +2,7 @@ import { useState, useEffect } from "react"
 import { Card, Button, Alert, Tab, Col, Nav } from "react-bootstrap"
 import { useAuth } from "../context/AuthContext"
 import { Link, useHistory } from "react-router-dom"
-import { storage, db } from '../firebase/firebase'
-var Buffer = require("buffer/").Buffer;
+import { storage } from '../firebase/firebase'
 
 //page
 import Order from "./Order"
@@ -11,9 +10,8 @@ import Files from "./Files"
 
 export default function Dashboard() {
   const [error, setError] = useState("")
-  const [address, setAddress] = useState("")
   const [list_files, setFiles] = useState([])
-  const { currentUser, logout } = useAuth()
+  const { currentUser, logout, userAddress } = useAuth()
   const history = useHistory()
 
   const storageRef = storage.ref();
@@ -59,18 +57,11 @@ export default function Dashboard() {
 
   useEffect(() => {
     setFiles([]);
-    console.log('read address', currentUser.uid);
-
-    const sub = db.collection("users").doc(currentUser.uid).onSnapshot((doc) => {
-      console.log("Current data: ", doc.data());
-      setAddress(doc.data().address);
-    });
 
     loadFiles();
 
     return () => {
         // cleanup
-        sub();
     }
   }, [])
 
@@ -114,7 +105,7 @@ export default function Dashboard() {
                     <strong>Email:</strong> {currentUser.email}
                   </div>
                   <div className="col">
-                    <strong>Address:</strong> {address}
+                    <strong>Address:</strong> {userAddress}
                   </div>
                 </div>
                 <Link to="/update-profile" className="btn btn-primary w-100 mt-3">

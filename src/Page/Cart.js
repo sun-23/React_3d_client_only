@@ -1,19 +1,24 @@
 import React, { useEffect, useState } from 'react'
-import { Button, Card, Row, Col, ButtonGroup, Form } from 'react-bootstrap';
+import { Button, Card, Row, Col, ButtonGroup, Form, Toast, Alert } from 'react-bootstrap';
 import { db } from '../firebase/firebase'
 import { useAuth } from '../context/AuthContext'
 import STLViewer from '../Component/STLViewer';
 import { Link } from 'react-router-dom'
 import { v4 as uuidv4 } from 'uuid';
+import axios from "axios"
 //todo read cart db
 
 let OmiseCard;
 export default function Cart() {
 
-    const { currentUser } = useAuth();
+    const { currentUser, userAddress } = useAuth();
     const [Allcart, setAllcart] = useState([]);
     const [TotalPrice,setTotalPrice] = useState(0);
     const [orderId, setOrderID] = useState(uuidv4());
+    const [axios_data, setResData] = useState({});
+    const [message, setMessage] = useState(false);
+    const [error, setError] = useState('');
+    const [success, setSuccess] = useState('');
     OmiseCard = window.OmiseCard;
 
     useEffect(() => {
@@ -67,7 +72,7 @@ export default function Cart() {
     }
 
     const loadOmise = () => {
-        console.log('process env', process.env)
+        //console.log('process env', process.env)
         OmiseCard.configure({
             publicKey: process.env.REACT_APP_OMISE_PUBLIC_KEY,
             currency: "thb",
@@ -88,20 +93,81 @@ export default function Cart() {
 
     const omiseTokenHandler = () => {
         OmiseCard.open({
-            amount: 10000,
+            amount: 100 * TotalPrice,
             frameDescription: 'Invoice ' + String(orderId),
-            onCreateTokenSuccess: (nonce) => {
+            onCreateTokenSuccess: (token) => {
                 /* Handler on token or source creation.  Use this to submit form or send ajax request to server */
-                console.log('omise token ', nonce);
+                //console.log('omise token ', token);
+                createCreditCardCharge(token);
             },
             onFormClosed: () => {},
         })
     }
 
+    const createCreditCardCharge = async (token) => {
+        try {
+            const res = await axios({
+                method: "post",
+                url: "https://nodejs-react3d-omise-payment.herokuapp.com/",
+                data: {
+                    "email": currentUser.email,
+                    "amount": 100 * TotalPrice,
+                    "orderId": orderId,
+                    "token": token
+                },
+                headers: {
+                    'Content-Type': "application/json"
+                }
+            })
+
+            const resData = await res.data
+            setResData(resData)
+            setMessage(true)
+            await createOrder()
+            console.log("res data", resData);
+        } catch (error) {
+            console.log("pay error", error);
+        }
+    }
+
     const handleCheckout = (e) => {
         e.preventDefault()
-        creditCardConfigure()
-        omiseTokenHandler()
+        if(TotalPrice >= 100){
+            creditCardConfigure()
+            omiseTokenHandler()
+        }else {
+            alert('please add something to cart')
+        }
+    }
+
+    const createOrder = () => {
+        const object = {
+            "orderId": orderId,
+            "Address": userAddress,
+            "Product": Allcart,
+            "userId": currentUser.uid,
+            "Date": new Date()
+        }
+        db.collection('order').doc(orderId).set(object).then(() => {
+            setSuccess('add your order')
+        }).catch((error) => {
+            setError('error cannot add order' + error)
+        })
+        deleteCart()
+    }
+
+    const deleteCart = () => {
+        db.collection('cart').where("userID", "==", currentUser.uid)
+            .get()
+            .then((querySnapshot) => {
+                querySnapshot.forEach((doc) => {
+                    // doc.data() is never undefined for query doc snapshots
+                    doc.ref.delete();
+                });
+            })
+            .catch((error) => {
+                console.log("Error getting documents: ", error);
+            });
     }
 
     return (
@@ -109,15 +175,33 @@ export default function Cart() {
             <Card.Body>
                 <h2 className="text-center mb-4">Cart</h2>
                 <p className="text-center mb-4"> want instant qoute? <Link to="/instantqoutation"> instant qoute </Link></p>
-                <Form>
+                {error && 
+                    <Alert variant="danger">
+                        {error}
+                    </Alert>
+                }
+                {success &&
+                    <Alert variant="success">
+                        {success}
+                    </Alert>
+                }
+                <Form onSubmit={(e) => handleCheckout(e)} className="m-3">
                     <Row>
                         <Col>
                             <h4 className="text-center">total price {TotalPrice} baht</h4>
                         </Col>
                         <Col>
-                            <Button id="credit_card" variant="primary" type="button" onClick={(e) => handleCheckout(e)}>
+                        {userAddress !== 'You haven not added the address yet.' ? <Button id="credit_card" variant="primary" type="submit">
                                 Pay with Credit Card
-                            </Button>
+                            </Button>: <p>please setup address before checkout</p>}
+                        </Col>
+                        <Col>
+                            <Toast show={message} onClose={() => setMessage(false)}>
+                                <Toast.Header>
+                                    <strong className="me-auto">Alert</strong>
+                                </Toast.Header>
+                                <Toast.Body>Payment status: {axios_data.status}</Toast.Body>
+                            </Toast>
                         </Col>
                     </Row>
                 </Form>
