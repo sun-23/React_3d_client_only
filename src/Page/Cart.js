@@ -67,9 +67,9 @@ export default function Cart() {
     }
 
     const loadOmise = () => {
-        console.log('process env', process.env)
+        //console.log('process env', process.env)
         OmiseCard.configure({
-            publicKey: process.env.REACT_APP_OMISE_PUBLIC,
+            publicKey: process.env.REACT_APP_OMISE_PUBLIC_KEY,
             currency: "thb",
             frameLabel: "3DSun",
             submitLabel: "PAY CARD NOW",
