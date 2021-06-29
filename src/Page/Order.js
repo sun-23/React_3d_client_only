@@ -29,8 +29,8 @@ export default function Order() {
                     var keyA = new Date(a.Date.seconds),
                         keyB = new Date(b.Date.seconds);
                     // Compare the 2 dates
-                    if (keyA < keyB) return -1;
-                    if (keyA > keyB) return 1;
+                    if (keyA < keyB) return 1;
+                    if (keyA > keyB) return -1;
                     return 0;
                 });
                 await setOrders(orders)
