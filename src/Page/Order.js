@@ -88,7 +88,7 @@ function ModelDetail({model}) {
                         backgroundColor="#f0f0f0"
                         width={200}
                         height={200}
-                        scale={1}/>
+                        scale={model.percent_size/100}/>
                     </Col>
                     <Col xl={4}>
                         <Card.Title className=" mr-auto w-100">{model.file_name}</Card.Title>

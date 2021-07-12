@@ -84,7 +84,7 @@ function Preview() {
           await uploadfile(buffer);
           setDisBtn(false);
         });
-      } else {
+      } else if (currentUser){
         setUpMessage('Cannot upload file that contains in cart or order. If you add to cart it used the current file from sever.');
         const storageRef = storage.ref();
         await storageRef.child('users_files/'+ currentUser.uid + "/" + stl_file.name)
@@ -115,6 +115,16 @@ function Preview() {
         }).catch((error) => {
           //console.log("cannot get url", url);
         })
+      } else {
+        setShow(true)
+        await stl_file.arrayBuffer().then(async (arrayBuffer) => {
+          var buffer = Buffer.from(arrayBuffer);
+          var stl = new NodeStl(buffer, {density: material});
+          //console.log(stl);
+          setSTL_Cal(stl)
+          calculatingPrice(stl);
+          setDisBtn(false);
+        });
       }
     } else {
       alert('Please select file');
