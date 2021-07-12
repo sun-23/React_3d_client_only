@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
-import { storage } from "../firebase/firebase";
 import { useAuth } from "../context/AuthContext";
+import { db, storage } from "../firebase/firebase"
+import { v4 as uuidv4 } from 'uuid';
 import { ScaleLoader } from 'react-spinners';
 import { Button } from "react-bootstrap"
 import { Link, useHistory } from "react-router-dom"
@@ -10,8 +11,6 @@ import Select_infill from '../Component/Select_infill'
 import Slider_modelsize from '../Component/Slider_modelsize'
 import Select_Quanlity from '../Component/Select_Quality'
 import NodeStl from "../stl" ;
-import { db } from "../firebase/firebase"
-import { v4 as uuidv4 } from 'uuid';
 var Buffer = require("buffer/").Buffer;
 
 function getWindowDimensions() {
@@ -73,21 +72,50 @@ function Preview() {
     var canUpload = await checkUpload();
     if(stl_file){
       setDisBtn(true);
-      setShow(true)
       //console.log('can upload', canUpload);
-      await stl_file.arrayBuffer().then(async (arrayBuffer) => {
-        var buffer = Buffer.from(arrayBuffer);
-        var stl = new NodeStl(buffer, {density: material});
-        //console.log(stl);
-        setSTL_Cal(stl)
-        calculatingPrice(stl);
-        if(currentUser && canUpload){
+      if(currentUser && canUpload){
+        setShow(true)
+        await stl_file.arrayBuffer().then(async (arrayBuffer) => {
+          var buffer = Buffer.from(arrayBuffer);
+          var stl = new NodeStl(buffer, {density: material});
+          //console.log(stl);
+          setSTL_Cal(stl)
+          calculatingPrice(stl);
           await uploadfile(buffer);
-        } else {
-          setUpMessage('cannot upload file that contains in cart or order');
-        }
-        setDisBtn(false);
-      });
+          setDisBtn(false);
+        });
+      } else {
+        setUpMessage('Cannot upload file that contains in cart or order. If you add to cart it used the current file from sever.');
+        const storageRef = storage.ref();
+        await storageRef.child('users_files/'+ currentUser.uid + "/" + stl_file.name)
+              .getDownloadURL().then((url) => {
+          //console.log("get url", url);
+          setFileUrl(url);
+
+          var xhr = new XMLHttpRequest();
+          xhr.responseType = 'blob';
+          xhr.onload = async (event) => {
+            var blob = xhr.response;
+            var file = new File([blob], stl_file.name);
+            //console.log('crrrent file', file)
+            setFile(file);
+            setShow(true);
+            await file.arrayBuffer().then(async (arrayBuffer) => {
+              var buffer = Buffer.from(arrayBuffer);
+              var stl = new NodeStl(buffer, {density: material});
+              //console.log(stl);
+              setSTL_Cal(stl);
+              calculatingPrice(stl);
+              setDisBtn(false);
+            });
+          };
+          xhr.open('GET', url);
+          xhr.send();
+
+        }).catch((error) => {
+          //console.log("cannot get url", url);
+        })
+      }
     } else {
       alert('Please select file');
     }
@@ -134,7 +162,7 @@ function Preview() {
   const calculatingPrice  = (stl_cal) => {
     const x = (50 + stl_cal.weight * (infill / 100) * (size / 100) * (size / 100) * (size / 100) * 10) < 100 ? 100 : (50 + stl_cal.weight * (infill / 100) * (size / 100) * (size / 100) * (size / 100) * 10);
     const price = x * quality;
-    console.log(price);
+    //console.log(price);
     setPrice(price);
   }
 
