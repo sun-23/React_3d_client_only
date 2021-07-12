@@ -50,7 +50,7 @@ function Preview() {
   const [price, setPrice] = useState(0);
   const [message, setMessage] = useState('please click submit button');
   const [uploadmessage, setUpMessage] = useState('');
-  const { currentUser } = useAuth();
+  const { currentUser, listFileOrder, listFileCart } = useAuth();
   const { height, width } = useWindowDimensions();
   const history = useHistory()
 
@@ -70,39 +70,65 @@ function Preview() {
   const submitStl = async () => {
     setShow(false);
     setSTL_Cal(null);
+    var canUpload = await checkUpload();
     if(stl_file){
       setDisBtn(true);
-      //console.log('stl_file',stl_file);
       setShow(true)
-      stl_file.arrayBuffer().then(async (arrayBuffer) => {
+      //console.log('can upload', canUpload);
+      await stl_file.arrayBuffer().then(async (arrayBuffer) => {
         var buffer = Buffer.from(arrayBuffer);
-        var stl = await new NodeStl(buffer, {density: material});
+        var stl = new NodeStl(buffer, {density: material});
         //console.log(stl);
         setSTL_Cal(stl)
         calculatingPrice(stl);
-        if(currentUser){
-          setUpMessage('file is uploading... to 3DSun storage');
-          const storageRef = storage.ref();
-          //console.log('users_files/'+ currentUser.uid + "/" + stl_file.name);
-          await storageRef.child('users_files/'+ currentUser.uid + "/" + stl_file.name)
-            .put(buffer).then(() => {
-              setUpMessage('');
-            }).catch(() => {
-              setUpMessage('upload file failed');
-            })
-          await storageRef.child('users_files/'+ currentUser.uid + "/" + stl_file.name).getDownloadURL().then((url) => {
-            //console.log("get url");
-            setFileUrl(url);
-          }).catch((error) => {
-            //console.log("cannot get url", url);
-          })
+        if(currentUser && canUpload){
+          await uploadfile(buffer);
+        } else {
+          setUpMessage('cannot upload file that contains in cart or order');
         }
-        await setDisBtn(false);
+        setDisBtn(false);
       });
-
     } else {
       alert('Please select file');
     }
+  }
+
+  const checkUpload = async () => {
+    var up = true;
+    //console.log('file name', stl_file.name);
+    await listFileOrder.map(filename => {
+      //console.log('o ', filename);
+      if(filename === stl_file.name){
+        up = false;
+      }
+    })
+    await listFileCart.map(filename => {
+      //console.log('c ', filename);
+      if(filename === stl_file.name){
+        up = false;
+      }
+    })
+    //console.log('up', up);
+    return up;
+  }
+ 
+  const uploadfile = async (buffer) => {
+    console.log('uploading...');
+    setUpMessage('file is uploading... to 3DSun storage');
+    const storageRef = storage.ref();
+    //console.log('users_files/'+ currentUser.uid + "/" + stl_file.name);
+    await storageRef.child('users_files/'+ currentUser.uid + "/" + stl_file.name)
+      .put(buffer).then(() => {
+        setUpMessage('');
+      }).catch(() => {
+        setUpMessage('upload file failed');
+      })
+    await storageRef.child('users_files/'+ currentUser.uid + "/" + stl_file.name).getDownloadURL().then((url) => {
+      //console.log("get url");
+      setFileUrl(url);
+    }).catch((error) => {
+      //console.log("cannot get url", url);
+    })
   }
 
   const calculatingPrice  = (stl_cal) => {
@@ -150,7 +176,7 @@ function Preview() {
       const cartObject = {
         "ID": id,
         "quantity": 1,
-        "userID": currentUser.uid,
+        "userId": currentUser.uid,
         "price": price.toFixed(2),
         "file_name": stl_file.name,
         "file_storage_url": stl_url,
@@ -241,7 +267,7 @@ function Preview() {
             {currentUser ? <Button onClick={createCart} disabled={disBtn}>
               Add to cart
             </Button> : <Link className=" btn btn-primary" 
-              to="/signup">Log In and order now</Link>}
+              to="/login">Log In and order now</Link>}
           </div>
         </div>
       </div>

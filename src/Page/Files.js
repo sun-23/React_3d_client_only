@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Card, Button, Col, Row } from "react-bootstrap"
+import { Card, Button, Row } from "react-bootstrap"
 import { Link } from 'react-router-dom'
 import { db } from '../firebase/firebase'
 import { useAuth } from '../context/AuthContext'
@@ -9,42 +9,60 @@ import STLViewer from '../Component/STLViewer';
 
 function PreviewCard({file, onDelete}) {
 
-    const { currentUser } = useAuth()
+    const { currentUser, listFileOrder, listFileCart } = useAuth()
     const [isDelete, setDelete] = useState(true);
 
     useEffect(() => {
         //effect
-        db.collection("cart").where("userID", "==", currentUser.uid)
-            .get()
-            .then((querySnapshot) => {
-                querySnapshot.forEach((doc) => {
-                    // doc.data() is never undefined for query doc snapshots
-                    // console.log(doc.id, " => ", doc.data().file_name);
-                    //console.log('match',doc.data().file_name,file.name,doc.data().file_name === file.name);
-                    if(doc.data().file_name === file.name){
-                        setDelete(false);
-                    }
-                });
-            })
-            .catch((error) => {
-                console.log("Error getting documents: ", error);
-            });
 
-        db.collection("order").where("userId", "==", currentUser.uid)
-            .get()
-            .then((querySnapshot) => {
-                querySnapshot.forEach((doc) => {
-                    doc.data().Product.map((model) => {
-                        //console.log('match', model.file_name, file.name, model.file_name === file.name);
-                        if(model.file_name === file.name){
-                            setDelete(false);
-                        }
-                    })   
-                });
-            })
-            .catch((error) => {
-                console.log("Error getting documents: ", error);
-            });
+        listFileOrder.map(filename => {
+            //console.log('o ', filename);
+            if(filename === file.name){
+                setDelete(false);
+            }
+        })
+
+        listFileCart.map(filename => {
+            //console.log('c ', filename);
+            if(filename === file.name){
+                setDelete(false);
+            }
+        })
+
+        // db.collection("cart").where("userId", "==", currentUser.uid)
+        //     .get()
+        //     .then((querySnapshot) => {
+        //         querySnapshot.forEach((doc) => {
+        //             // doc.data() is never undefined for query doc snapshots
+        //             // console.log(doc.id, " => ", doc.data().file_name);
+        //             //console.log('match',doc.data().file_name,file.name,doc.data().file_name === file.name);
+        //             if(doc.data().file_name === file.name){
+        //                 setDelete(false);
+        //             }
+        //         });
+        //     })
+        //     .catch((error) => {
+        //         console.log("Error getting documents: ", error);
+        //     });
+
+        // db.collection("order").where("userId", "==", currentUser.uid)
+        //     .get()
+        //     .then((querySnapshot) => {
+        //         querySnapshot.forEach((doc) => {
+        //             if(doc.data().process !== "processing"){
+        //                 doc.data().Product.map((model) => {
+        //                     //console.log('match', model.file_name, file.name, model.file_name === file.name);
+        //                     if(model.file_name === file.name){
+        //                         setDelete(false);
+        //                     }
+        //                 }) 
+        //             }  
+        //         });
+        //     })
+        //     .catch((error) => {
+        //         console.log("Error getting documents: ", error);
+        //     });
+
     }, [])
 
     return ( 

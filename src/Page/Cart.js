@@ -26,7 +26,7 @@ export default function Cart() {
         loadOmise()
         setAllcart([])
         setTotalPrice(0)
-        const sub = db.collection("cart").where("userID", "==", currentUser.uid)
+        const sub = db.collection("cart").where("userId", "==", currentUser.uid)
             .onSnapshot((querySnapshot) => {
                 var cart = []
                 var price = 0;
@@ -146,7 +146,8 @@ export default function Cart() {
             "Address": userAddress,
             "Product": Allcart,
             "userId": currentUser.uid,
-            "Date": new Date()
+            "Date": new Date(),
+            "process": "processing"
         }
         db.collection('order').doc(orderId).set(object).then(() => {
             setSuccess('add your order')
@@ -157,7 +158,7 @@ export default function Cart() {
     }
 
     const deleteCart = () => {
-        db.collection('cart').where("userID", "==", currentUser.uid)
+        db.collection('cart').where("userId", "==", currentUser.uid)
             .get()
             .then((querySnapshot) => {
                 querySnapshot.forEach((doc) => {
