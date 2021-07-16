@@ -123,7 +123,10 @@ export default function Cart() {
             const resData = await res.data
             setResData(resData)
             setMessage(true)
-            await createOrder()
+            // await createOrder()
+            if(resData.status === "successful"){
+                await createOrder()
+            }
             console.log("res data", resData);
         } catch (error) {
             console.log("pay error", error);
