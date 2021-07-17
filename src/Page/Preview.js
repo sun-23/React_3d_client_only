@@ -41,6 +41,7 @@ function Preview() {
   const [stl_url, setFileUrl] = useState("");
   const [stl_cal, setSTL_Cal] = useState();
   const [show, setShow] = useState(false);
+  const [showStl, setShowStl] = useState(false);
   const [disBtn, setDisBtn] = useState(false);
   const [material, setMaterial] = useState(1.27);
   const [infill, setInfill] = useState(40);
@@ -57,10 +58,11 @@ function Preview() {
     var file = e.target.files[0];
     if(file && file.name.toLocaleLowerCase().endsWith('.stl')){
       setShow(false);
+      setShowStl(false);
       setSTL_Cal(null);
       setFile(file);
       setPrice(0);
-      setMessage('Please click submit button');
+      setMessage('please click Calculate button');
     } else {
       alert(' Invalid file type. Only STL files are supported. Please select a new file. ');
     }
@@ -68,19 +70,16 @@ function Preview() {
 
   const submitStl = async () => {
     setShow(false);
+    setShowStl(false);
     setSTL_Cal(null);
-    var canUpload = await checkUpload();
     if(stl_file){
+      var canUpload = await checkUpload();
       setDisBtn(true);
       //console.log('can upload', canUpload);
       if(currentUser && canUpload){
-        setShow(true)
+        setShowStl(true)
         await stl_file.arrayBuffer().then(async (arrayBuffer) => {
           var buffer = Buffer.from(arrayBuffer);
-          var stl = new NodeStl(buffer, {density: material});
-          //console.log(stl);
-          setSTL_Cal(stl)
-          calculatingPrice(stl);
           await uploadfile(buffer);
           setDisBtn(false);
         });
@@ -99,15 +98,8 @@ function Preview() {
             var file = new File([blob], stl_file.name);
             //console.log('crrrent file', file)
             setFile(file);
-            setShow(true);
-            await file.arrayBuffer().then(async (arrayBuffer) => {
-              var buffer = Buffer.from(arrayBuffer);
-              var stl = new NodeStl(buffer, {density: material});
-              //console.log(stl);
-              setSTL_Cal(stl);
-              calculatingPrice(stl);
-              setDisBtn(false);
-            });
+            setShowStl(true);
+            setDisBtn(false);
           };
           xhr.open('GET', url);
           xhr.send();
@@ -116,16 +108,30 @@ function Preview() {
           //console.log("cannot get url", url);
         })
       } else {
-        setShow(true)
-        await stl_file.arrayBuffer().then(async (arrayBuffer) => {
-          var buffer = Buffer.from(arrayBuffer);
-          var stl = new NodeStl(buffer, {density: material});
-          //console.log(stl);
-          setSTL_Cal(stl)
-          calculatingPrice(stl);
-          setDisBtn(false);
-        });
+        //
+        setShowStl(true);
+        setDisBtn(false);
       }
+    } else {
+      alert('Please select file');
+    }
+  }
+
+  const getStlCal = async () => {
+    setShow(false);
+    setSTL_Cal(null);
+    setUpMessage('');
+    if(stl_file){
+      setDisBtn(true);
+      setShow(true)
+      await stl_file.arrayBuffer().then(async (arrayBuffer) => {
+        var buffer = Buffer.from(arrayBuffer);
+        var stl = new NodeStl(buffer, {density: material});
+        //console.log(stl);
+        setSTL_Cal(stl)
+        calculatingPrice(stl);
+        setDisBtn(false);
+      });
     } else {
       alert('Please select file');
     }
@@ -157,7 +163,7 @@ function Preview() {
     //console.log('users_files/'+ currentUser.uid + "/" + stl_file.name);
     await storageRef.child('users_files/'+ currentUser.uid + "/" + stl_file.name)
       .put(buffer).then(() => {
-        setUpMessage('');
+        setUpMessage('please click Calculate button');
       }).catch(() => {
         setUpMessage('upload file failed');
       })
@@ -181,7 +187,7 @@ function Preview() {
     setMaterial(parseFloat(e.target.value));
     setSTL_Cal(null);
     setShow(false)
-    setMessage('please click submit button');
+    setMessage('please click Calculate button');
   }
 
   const changeInfill = (e) => {
@@ -189,7 +195,7 @@ function Preview() {
     setInfill(parseFloat(e.target.value));
     setSTL_Cal(null);
     setShow(false)
-    setMessage('please click submit button');
+    setMessage('please click Calculate button');
   }
 
   const changeModelSize = (e) => {
@@ -197,7 +203,7 @@ function Preview() {
     setSize(e.target.value)
     setSTL_Cal(null);
     setShow(false)
-    setMessage('please click submit button');
+    setMessage('please click Calculate button');
   }
 
   const changeQuanlity = (e) => {
@@ -205,7 +211,7 @@ function Preview() {
     setQuality(e.target.value)
     setSTL_Cal(null);
     setShow(false)
-    setMessage('please click submit button');
+    setMessage('please click Calculate button');
   }
 
   const createCart = () => {
@@ -233,7 +239,7 @@ function Preview() {
         console.log('error', error);
       })
     }else{
-      setMessage('please click submit button')
+      setMessage('please click Submit and Calculate button')
     }
   }
 
@@ -243,7 +249,7 @@ function Preview() {
       <div className={(width < 768) ? "container" : "d-flex justify-content-center container"}> {/* d-flex justify-content-center  */}
         <div>
           {
-            (width > 360) ? show ? <STLViewer
+            (width > 360) ? showStl ? <STLViewer
             onSceneRendered={(element) => {
                 console.log(element)
             }}
@@ -261,7 +267,7 @@ function Preview() {
         <div className="form-control">
           <h2>Preview 3d stl model</h2>
           <div className="row input-group mb-3">
-            <div className="col">
+            <div className="col-6">
               <input
                 className="form-control"
                 type="file"
@@ -269,8 +275,11 @@ function Preview() {
                 onChange={(e) => selectFile(e)}
               ></input>
             </div>
-            <div className="col">
+            <div className="col-2">
               <Button type="submit" onClick={submitStl}  disabled={disBtn}>Submit</Button>
+            </div>
+            <div className="col-4">
+              <Button type="submit" onClick={getStlCal}  disabled={disBtn}>Calculate Price</Button>
             </div>
             {uploadmessage ? (<div className="col">
               <p className="alert alert-warning">{uploadmessage}</p>

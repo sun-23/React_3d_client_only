@@ -17,6 +17,7 @@ export default function Cart() {
     const [orderId, setOrderID] = useState(uuidv4());
     const [axios_data, setResData] = useState({});
     const [message, setMessage] = useState(false);
+    const [warning, setWarning] = useState('')
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
     OmiseCard = window.OmiseCard;
@@ -106,6 +107,7 @@ export default function Cart() {
 
     const createCreditCardCharge = async (token) => {
         try {
+            setWarning('Please waiting for payment.')
             const res = await axios({
                 method: "post",
                 url: "https://nodejs-react3d-omise-payment.herokuapp.com/checkout-credit-card",
@@ -128,6 +130,7 @@ export default function Cart() {
                 await createOrder()
             }
             console.log("res data", resData);
+            setWarning('')
         } catch (error) {
             console.log("pay error", error);
         }
@@ -189,13 +192,18 @@ export default function Cart() {
                         {success}
                     </Alert>
                 }
+                {warning &&
+                    <Alert variant="warning">
+                        {warning}
+                    </Alert>
+                }
                 <Form onSubmit={(e) => handleCheckout(e)} className="m-3">
                     <Row>
                         <Col>
                             <h4 className="text-center">total price {TotalPrice} baht</h4>
                         </Col>
                         <Col>
-                        {userAddress !== 'You haven not added the address yet.' ? <Button id="credit_card" variant="primary" type="submit">
+                        {userAddress !== 'You have not added the address yet.' ? <Button id="credit_card" variant="primary" type="submit">
                                 Pay with Credit Card
                             </Button>: <p>please setup address before checkout</p>}
                         </Col>
